@@ -40,8 +40,6 @@ public class InterfaceMVM extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Mattos Virtual Machine");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setPreferredSize(new java.awt.Dimension(800, 600));
-        setResizable(false);
 
         fundoJP.setPreferredSize(new java.awt.Dimension(800, 600));
         fundoJP.setLayout(new java.awt.GridBagLayout());
@@ -74,11 +72,10 @@ public class InterfaceMVM extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 25;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.07;
         fundoJP.add(ferramentaJTB, gridBagConstraints);
         ferramentaJTB.getAccessibleContext().setAccessibleName("");
 
@@ -88,7 +85,7 @@ public class InterfaceMVM extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 12;
         gridBagConstraints.gridheight = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -100,12 +97,11 @@ public class InterfaceMVM extends javax.swing.JFrame {
         linhaJTF.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.03;
         fundoJP.add(linhaJTF, gridBagConstraints);
 
         getContentPane().add(fundoJP, java.awt.BorderLayout.CENTER);
