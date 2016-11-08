@@ -693,15 +693,13 @@ public class MVM {
         arquivo.close();
     }
     
-    public static void traduzirCodigoFonte(String caminho, short mem[], int enderecoDeCarga) throws IOException {        
+    public static void traduzirCodigoFonte(String codigoFonte, short mem[], int enderecoDeCarga) throws IOException {        
         int indice = 0;
         
-        Path localArquivo = Paths.get(caminho);
-        BufferedReader arquivo = new BufferedReader(new FileReader(localArquivo.toFile()));
-        
-        String linha = arquivo.readLine();
-        linha = arquivo.readLine();
-        linha = arquivo.readLine();
+//        Path localArquivo = Paths.get(caminho);
+//        BufferedReader arquivo = new BufferedReader(new FileReader(localArquivo.toFile()));
+        String [] codigo = codigoFonte.split("\n");
+        String linha = codigo[0];
         String instFinal = "";
         short valorEstatico = Short.MIN_VALUE;
         while (linha != null) {              
@@ -918,7 +916,8 @@ public class MVM {
                     break;
             }
             indice++;
-            linha = arquivo.readLine();
+            codigo = codigo[1].split("\n");
+            linha = codigo[0];
         }
         decodificador(mem, -1, enderecoDeCarga);
     }
