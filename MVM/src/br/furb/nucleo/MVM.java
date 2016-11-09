@@ -22,8 +22,9 @@ import javax.swing.JOptionPane;
 public class MVM {
 
     public static int botao = 0;
-
-    public static void decodificador(short mem[], int programa, int aux) {
+    private static short mem[] = new short[1024];
+    
+    public static void decodificador(int programa, int aux) {
         int ax = 0, bx = 0, cx = 0, bp = 0, sp = 0, ip, ri;
         boolean repetir = true;
         ip = 0 + aux;
@@ -519,172 +520,172 @@ public class MVM {
         Files.deleteIfExists(localArquivo);
         BufferedWriter arquivo = new BufferedWriter(new FileWriter(localArquivo.toFile()));        
         String newLine = System.getProperty("line.separator");
-        arquivo.write("Programa: " + programa + newLine + newLine);
+        arquivo.write("Programa: " + programa + newLine);
         StringBuilder conteudoArquivo = new StringBuilder();
         fimPrograma += enderecoDeCarga;
         for (int ip = enderecoDeCarga; ip < fimPrograma; ip++) {
             switch (mem[ip]) {
                 case 00:
-                    conteudoArquivo.append("init ax;" + newLine);
+                    conteudoArquivo.append("init ax;").append(newLine);
                     break;
                 case 1:
-                    conteudoArquivo.append("move ax,bx;" + newLine);
+                    conteudoArquivo.append("move ax,bx;").append(newLine);
                     break;
                 case 2:
-                    conteudoArquivo.append("move ax,cx;" + newLine);
+                    conteudoArquivo.append("move ax,cx;").append(newLine);
                     break;
                 case 3:
-                    conteudoArquivo.append("move bx,ax;" + newLine);
+                    conteudoArquivo.append("move bx,ax;").append(newLine);
                     break;
                 case 4:
-                    conteudoArquivo.append("move cx,ax;" + newLine);
+                    conteudoArquivo.append("move cx,ax;").append(newLine);
                     break;
                 case 5:
-                    conteudoArquivo.append("move ax,[" + mem[++ip] + "];" + newLine);
+                    conteudoArquivo.append("move ax,[").append(mem[++ip]).append("];").append(newLine);
                     break;
                 case 6:
-                    conteudoArquivo.append("move ax,[bx+" + mem[++ip] + "];" + newLine);
+                    conteudoArquivo.append("move ax,[bx+").append(mem[++ip]).append("];").append(newLine);
                     break;
                 case 7:
-                    conteudoArquivo.append("move ax,[bp-" + mem[++ip] + "];" + newLine);
+                    conteudoArquivo.append("move ax,[bp-").append(mem[++ip]).append("];").append(newLine);
                     break;
                 case 8:
-                    conteudoArquivo.append("move ax,[bp+" + mem[++ip] + "];" + newLine);
+                    conteudoArquivo.append("move ax,[bp+").append(mem[++ip]).append("];").append(newLine);
                     break;
                 case 9:
-                    conteudoArquivo.append("move [" + mem[++ip] + "],ax;" + newLine);
+                    conteudoArquivo.append("move [").append(mem[++ip]).append("],ax;").append(newLine);
                     break;
                 case 10:
-                    conteudoArquivo.append("move [bx+" + mem[++ip] + "],ax;" + newLine);
+                    conteudoArquivo.append("move [bx+").append(mem[++ip]).append("],ax;").append(newLine);
                     break;
                 case 11:
-                    conteudoArquivo.append("move bp,sp;" + newLine);
+                    conteudoArquivo.append("move bp,sp;").append(newLine);
                     break;
                 case 12:
-                    conteudoArquivo.append("move sp,bp;" + newLine);
+                    conteudoArquivo.append("move sp,bp;").append(newLine);
                     break;
                 case 13:
-                    conteudoArquivo.append("add ax,bx;" + newLine);
+                    conteudoArquivo.append("add ax,bx;").append(newLine);
                     break;
                 case 14:
-                    conteudoArquivo.append("add ax,cx;" + newLine);
+                    conteudoArquivo.append("add ax,cx;").append(newLine);
                     break;
                 case 15:
-                    conteudoArquivo.append("add bx,cx;" + newLine);
+                    conteudoArquivo.append("add bx,cx;").append(newLine);
                     break;
                 case 16:
-                    conteudoArquivo.append("sub ax,bx;" + newLine);
+                    conteudoArquivo.append("sub ax,bx;").append(newLine);
                     break;
                 case 17:
-                    conteudoArquivo.append("sub ax,cx;" + newLine);
+                    conteudoArquivo.append("sub ax,cx;").append(newLine);
                     break;
                 case 18:
-                    conteudoArquivo.append("sub bx,cx;" + newLine);
+                    conteudoArquivo.append("sub bx,cx;").append(newLine);
                     break;
                 case 19:
-                    conteudoArquivo.append("inc ax;" + newLine);
+                    conteudoArquivo.append("inc ax;").append(newLine);
                     break;
                 case 20:
-                    conteudoArquivo.append("inc bx;" + newLine);
+                    conteudoArquivo.append("inc bx;").append(newLine);
                     break;
                 case 21:
-                    conteudoArquivo.append("inc cx;" + newLine);
+                    conteudoArquivo.append("inc cx;").append(newLine);
                     break;
                 case 22:
-                    conteudoArquivo.append("dec ax;" + newLine);
+                    conteudoArquivo.append("dec ax;").append(newLine);
                     break;
                 case 23:
-                    conteudoArquivo.append("dec bx;" + newLine);
+                    conteudoArquivo.append("dec bx;").append(newLine);
                     break;
                 case 24:
-                    conteudoArquivo.append("dec cx;" + newLine);
+                    conteudoArquivo.append("dec cx;").append(newLine);
                     break;
                 case 25:
-                    conteudoArquivo.append("test ax0," + mem[++ip] + ";" + newLine);
+                    conteudoArquivo.append("test ax0,").append(mem[++ip]).append(";").append(newLine);
                     break;
                 case 26:
-                    conteudoArquivo.append("jmp " + mem[++ip] + ";" + newLine);
+                    conteudoArquivo.append("jmp ").append(mem[++ip]).append(";").append(newLine);
                     break;
                 case 27:
-                    conteudoArquivo.append("call " + mem[++ip] + ";" + newLine);
+                    conteudoArquivo.append("call ").append(mem[++ip]).append(";").append(newLine);
                     break;
                 case 28:
-                    conteudoArquivo.append("ret;" + newLine);
+                    conteudoArquivo.append("ret;").append(newLine);
                     break;
                 case 29:
-                    conteudoArquivo.append("in ax;" + newLine);
+                    conteudoArquivo.append("in ax;").append(newLine);
                     break;
                 case 30:
-                    conteudoArquivo.append("out ax;" + newLine);
+                    conteudoArquivo.append("out ax;").append(newLine);
                     break;
                 case 31:
-                    conteudoArquivo.append("push ax;" + newLine);
+                    conteudoArquivo.append("push ax;").append(newLine);
                     break;
                 case 32:
-                    conteudoArquivo.append("push bx;" + newLine);
+                    conteudoArquivo.append("push bx;").append(newLine);
                     break;
                 case 33:
-                    conteudoArquivo.append("push cx;" + newLine);
+                    conteudoArquivo.append("push cx;").append(newLine);
                     break;
                 case 34:
-                    conteudoArquivo.append("push bp;" + newLine);
+                    conteudoArquivo.append("push bp;").append(newLine);
                     break;
                 case 35:
-                    conteudoArquivo.append("pop bp;" + newLine);
+                    conteudoArquivo.append("pop bp;").append(newLine);
                     break;
                 case 36:
-                    conteudoArquivo.append("pop cx;" + newLine);
+                    conteudoArquivo.append("pop cx;").append(newLine);
                     break;
                 case 37:
-                    conteudoArquivo.append("pop bx;" + newLine);
+                    conteudoArquivo.append("pop bx;").append(newLine);
                     break;
                 case 38:
-                    conteudoArquivo.append("pop ax;" + newLine);
+                    conteudoArquivo.append("pop ax;").append(newLine);
                     break;
                 case 39:
-                    conteudoArquivo.append("nop;" + newLine);
+                    conteudoArquivo.append("nop;").append(newLine);
                     break;
                 case 40:
-                    conteudoArquivo.append("halt;" + newLine);
+                    conteudoArquivo.append("halt;").append(newLine);
                     break;
                 case 41:
-                    conteudoArquivo.append("dec sp;" + newLine);
+                    conteudoArquivo.append("dec sp;").append(newLine);
                     break;
                 case 42:
-                    conteudoArquivo.append("move [bp-" + mem[++ip] + "], ax;" + newLine);
+                    conteudoArquivo.append("move [bp-").append(mem[++ip]).append("], ax;").append(newLine);
                     break;
                 case 43:
-                    conteudoArquivo.append("move [bp+" + mem[++ip] + "], ax;" + newLine);
+                    conteudoArquivo.append("move [bp+").append(mem[++ip]).append("], ax;").append(newLine);
                     break;
                 case 44:
-                    conteudoArquivo.append("move ax,{" + mem[++ip] + "};" + newLine);
+                    conteudoArquivo.append("move ax,{").append(mem[++ip]).append("};").append(newLine);
                     break;
                 case 45:
-                    conteudoArquivo.append("test axEqbx," + mem[++ip] + ";" + newLine);
+                    conteudoArquivo.append("test axEqbx,").append(mem[++ip]).append(";").append(newLine);
                     break;
                 case 46:
-                    conteudoArquivo.append("inc sp;" + newLine);
+                    conteudoArquivo.append("inc sp;").append(newLine);
                     break;
                 case 47:
-                    conteudoArquivo.append("move ax,sp;" + newLine);
+                    conteudoArquivo.append("move ax,sp;").append(newLine);
                     break;
                 case 48:
-                    conteudoArquivo.append("move sp,ax;" + newLine);
+                    conteudoArquivo.append("move sp,ax;").append(newLine);
                     break;
                 case 49:
-                    conteudoArquivo.append("move ax,bp;" + newLine);
+                    conteudoArquivo.append("move ax,bp;").append(newLine);
                     break;
                 case 50:
-                    conteudoArquivo.append("move bp,ax;" + newLine);
+                    conteudoArquivo.append("move bp,ax;").append(newLine);
                     break;
                 case 51:
-                    conteudoArquivo.append("iret;" + newLine);
+                    conteudoArquivo.append("iret;").append(newLine);
                     break;
                 case 52:
-                    conteudoArquivo.append("int " + mem[++ip] + ";" + newLine);
+                    conteudoArquivo.append("int ").append(mem[++ip]).append(";").append(newLine);
                     break;
                 case 53:
-                    conteudoArquivo.append("sub bx,ax;" + newLine);
+                    conteudoArquivo.append("sub bx,ax;").append(newLine);
                     break;
             }
         }
@@ -693,7 +694,7 @@ public class MVM {
         arquivo.close();
     }
     
-    public static void traduzirCodigoFonte(String codigoFonte, short mem[], int enderecoDeCarga) throws IOException {        
+    public static void traduzirCodigoFonte(String codigoFonte, int enderecoDeCarga) throws IOException {        
         int indice = 0;
         
 //        Path localArquivo = Paths.get(caminho);
@@ -919,6 +920,6 @@ public class MVM {
             codigo = codigo[1].split("\n");
             linha = codigo[0];
         }
-        decodificador(mem, -1, enderecoDeCarga);
+        decodificador(-1, enderecoDeCarga);
     }
 }
