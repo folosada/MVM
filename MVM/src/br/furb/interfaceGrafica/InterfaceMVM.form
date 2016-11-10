@@ -69,6 +69,9 @@
                 </Property>
                 <Property name="verticalTextPosition" type="int" value="3"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="carregarJBActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="salvarJB">
               <Properties>
@@ -80,6 +83,9 @@
                 </Property>
                 <Property name="verticalTextPosition" type="int" value="3"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="salvarJBActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="executarJB">
               <Properties>
@@ -91,6 +97,9 @@
                 </Property>
                 <Property name="verticalTextPosition" type="int" value="3"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="executarJBActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

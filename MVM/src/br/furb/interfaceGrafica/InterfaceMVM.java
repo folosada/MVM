@@ -5,17 +5,35 @@
  */
 package br.furb.interfaceGrafica;
 
+import br.furb.nucleo.MVM;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.stage.FileChooser;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 /**
  *
- * @author Flávio e Carol
+ * @author flaviolosada
  */
 public class InterfaceMVM extends javax.swing.JFrame {
-
+    private MVM mattosMachine;
     /**
      * Creates new form InterfaceMVM
      */
     public InterfaceMVM() {
         initComponents();
+        mattosMachine = new MVM();
+        this.codigoFonteJTA.setBorder(new NumberedBorder());
     }
 
     /**
@@ -52,6 +70,11 @@ public class InterfaceMVM extends javax.swing.JFrame {
         carregarJB.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         carregarJB.setPreferredSize(new java.awt.Dimension(70, 35));
         carregarJB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        carregarJB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                carregarJBActionPerformed(evt);
+            }
+        });
         ferramentaJTB.add(carregarJB);
 
         salvarJB.setText("Salvar");
@@ -59,6 +82,11 @@ public class InterfaceMVM extends javax.swing.JFrame {
         salvarJB.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         salvarJB.setPreferredSize(new java.awt.Dimension(70, 35));
         salvarJB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        salvarJB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                salvarJBActionPerformed(evt);
+            }
+        });
         ferramentaJTB.add(salvarJB);
 
         executarJB.setFocusable(false);
@@ -66,6 +94,11 @@ public class InterfaceMVM extends javax.swing.JFrame {
         executarJB.setLabel("Executar");
         executarJB.setPreferredSize(new java.awt.Dimension(70, 35));
         executarJB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        executarJB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                executarJBActionPerformed(evt);
+            }
+        });
         ferramentaJTB.add(executarJB);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -109,6 +142,69 @@ public class InterfaceMVM extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void carregarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carregarJBActionPerformed
+        JFileChooser abreArquivo = new JFileChooser();
+        abreArquivo.setFileFilter(new ExtensionFileFilter());
+        abreArquivo.setAcceptAllFileFilterUsed(false);
+        abreArquivo.setDialogType(JFileChooser.OPEN_DIALOG);
+        if (abreArquivo.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File arquivo = abreArquivo.getSelectedFile();
+            try {
+                BufferedReader bf = new BufferedReader(new FileReader(arquivo));
+                StringBuilder conteudoArquivo = new StringBuilder();
+                String linha = bf.readLine();
+                while (linha != null) {
+                    conteudoArquivo.append(linha).append("\n");
+                    linha = bf.readLine();
+                }
+                codigoFonteJTA.setText(conteudoArquivo.toString());
+                bf.close();
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(this, "Não foi possível encontrar o arquivo selecionado.");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Houve um problema ao tentar abrir o arquivo.");
+            }
+        }
+    }//GEN-LAST:event_carregarJBActionPerformed
+
+    private void salvarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salvarJBActionPerformed
+        JFileChooser salvaArquivo = new JFileChooser();
+        salvaArquivo.setFileFilter(new ExtensionFileFilter());
+        salvaArquivo.setAcceptAllFileFilterUsed(false);
+        salvaArquivo.setDialogType(JFileChooser.SAVE_DIALOG);
+        if (salvaArquivo.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File arquivo = salvaArquivo.getSelectedFile();
+            arquivo = new File(arquivo.getAbsolutePath() + ".asm");
+            boolean gravar = true;
+            if (arquivo.exists()) {
+                gravar = JOptionPane.showConfirmDialog(this, 
+                        "O arquivo informado já existe, deseja substituir?", "Arquivo existente",  JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+            }
+            if (gravar) {
+                try {
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo));
+                    bw.write(codigoFonteJTA.getText().replace("\n", "\r\n"));
+                    bw.flush();
+                    bw.close();
+                } catch (FileNotFoundException ex) {
+                    JOptionPane.showMessageDialog(this, "Não foi possível encontrar o arquivo selecionado.");
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Houve um problema ao tentar abrir o arquivo.");
+                }
+            } else {
+                salvarJBActionPerformed(evt);
+            }
+        }
+    }//GEN-LAST:event_salvarJBActionPerformed
+
+    private void executarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executarJBActionPerformed
+        try {
+            mattosMachine.traduzirCodigoFonte(codigoFonteJTA.getText(), 0);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Houve um problema ao executar o código-fonte.");
+        }
+    }//GEN-LAST:event_executarJBActionPerformed
 
     /**
      * @param args the command line arguments

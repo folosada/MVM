@@ -692,231 +692,230 @@ public class MVM {
         arquivo.close();
     }
     
-    public static void traduzirCodigoFonte(String codigoFonte, int enderecoDeCarga) throws IOException {        
+    public void traduzirCodigoFonte(String codigoFonte, int enderecoDeCarga) throws IOException {        
         int indice = 0;
         
-//        Path localArquivo = Paths.get(caminho);
-//        BufferedReader arquivo = new BufferedReader(new FileReader(localArquivo.toFile()));
         String [] codigo = codigoFonte.split("\n");
-        String linha = codigo[0];
+        String linha = "";
         String instFinal = "";
         short valorEstatico = Short.MIN_VALUE;
-        while (linha != null) {              
-            if (linha.contains("[bx+")) {
-                instFinal = linha.substring(0, linha.indexOf("[bx+")+4);
-                valorEstatico = Short.parseShort(linha.substring(linha.indexOf("[bx+")+4, linha.indexOf("]")));
-            } else if (linha.contains("[bp+")) {
-                instFinal = linha.substring(0, linha.indexOf("[bp+")+4);
-                valorEstatico = Short.parseShort(linha.substring(linha.indexOf("[bp+")+4, linha.indexOf("]")));
-            } else if (linha.contains("[bp-")) {
-                instFinal = linha.substring(0, linha.indexOf("[bp-")+4);
-                valorEstatico = Short.parseShort(linha.substring(linha.indexOf("[bp-")+4, linha.indexOf("]")));
-            } else if (linha.contains("[")) {
-                instFinal = linha.substring(0, linha.indexOf("[")+1);
-                valorEstatico = Short.parseShort(linha.substring(linha.indexOf("[")+1, linha.indexOf("]")));
-            } else if (linha.contains("{")) { 
-                instFinal = linha.substring(0, linha.indexOf("{")+1);
-                valorEstatico = Short.parseShort(linha.substring(linha.indexOf("{")+1, linha.indexOf("}")));
-            } else if (linha.contains("jmp")) {
-                instFinal = "jmp ";
-                valorEstatico = Short.parseShort(linha.substring(linha.indexOf("jmp ")+4, linha.indexOf(";")));
-            } else if (linha.contains("int")) {
-                instFinal = "int ";
-                valorEstatico = Short.parseShort(linha.substring(linha.indexOf("int ")+4, linha.indexOf(";")));
-            } else if (linha.contains("call")) {
-                instFinal = "call ";
-                valorEstatico = Short.parseShort(linha.substring(linha.indexOf("call ")+5, linha.indexOf(";")));
-            } else if (linha.contains("test ax0,")) {
-                instFinal = "test ax0,";
-                valorEstatico = Short.parseShort(linha.substring(linha.indexOf(",")+1, linha.indexOf(";")));
-            } else if (linha.contains("test axEqbx,")) {
-                instFinal = "test axEqbx,";
-                valorEstatico = Short.parseShort(linha.substring(linha.indexOf(",")+1, linha.indexOf(";")));
-            } else {
-                instFinal = linha;
-            }   
-            
-            switch (instFinal) {
-                case "init ax;":
-                    mem[indice + enderecoDeCarga] = 0;
-                    break;
-                case "move ax,bx;":
-                    mem[indice + enderecoDeCarga] = 1;
-                    break;
-                case "move ax,cx;":
-                    mem[indice + enderecoDeCarga] = 2;
-                    break;
-                case "move bx,ax;":
-                    mem[indice + enderecoDeCarga] = 3;
-                    break;
-                case "move cx,ax;":
-                    mem[indice + enderecoDeCarga] = 4;
-                    break;
-                case "move ax,[":
-                    mem[indice + enderecoDeCarga] = 5;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "move ax,[bx+":
-                    mem[indice + enderecoDeCarga] = 6;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "move ax,[bp-":
-                    mem[indice + enderecoDeCarga] = 7;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "move ax,[bp+":
-                    mem[indice + enderecoDeCarga] = 8;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "move [":
-                    mem[indice + enderecoDeCarga] = 9;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "move [bx+":
-                    mem[indice + enderecoDeCarga] = 10;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "move bp,sp;":
-                    mem[indice + enderecoDeCarga] = 11;
-                    break;
-                case "move sp,bp;":
-                    mem[indice + enderecoDeCarga] = 12;
-                    break;
-                case "add ax,bx;":
-                    mem[indice + enderecoDeCarga] = 13;
-                    break;
-                case "add ax,cx;":
-                    mem[indice + enderecoDeCarga] = 14;
-                    break;
-                case "add bx,cx;":
-                    mem[indice + enderecoDeCarga] = 15;
-                    break;
-                case "sub ax,bx;":
-                    mem[indice + enderecoDeCarga] = 16;
-                    break;
-                case "sub ax,cx;":
-                    mem[indice + enderecoDeCarga] = 17;
-                    break;
-                case "sub bx,cx;":
-                    mem[indice + enderecoDeCarga] = 18;
-                    break;
-                case "inc ax;":
-                    mem[indice + enderecoDeCarga] = 19;
-                    break;
-                case "inc bx;":
-                    mem[indice + enderecoDeCarga] = 20;
-                    break;
-                case "inc cx;":
-                    mem[indice + enderecoDeCarga] = 21;
-                    break;
-                case "dec ax;":
-                    mem[indice + enderecoDeCarga] = 22;
-                    break;
-                case "dec bx;":
-                    mem[indice + enderecoDeCarga] = 23;
-                    break;
-                case "dec cx;":
-                    mem[indice + enderecoDeCarga] = 24;
-                    break;
-                case "test ax0,":
-                    mem[indice + enderecoDeCarga] = 25;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "jmp ":
-                    mem[indice + enderecoDeCarga] = 26;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "call ":
-                    mem[indice + enderecoDeCarga] = 27;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "ret;":
-                    mem[indice + enderecoDeCarga] = 28;
-                    break;
-                case "in ax;":
-                    mem[indice + enderecoDeCarga] = 29;
-                    break;
-                case "out ax;":
-                    mem[indice + enderecoDeCarga] = 30;
-                    break;
-                case "push ax;":
-                    mem[indice + enderecoDeCarga] = 31;
-                    break;
-                case "push bx;":
-                    mem[indice + enderecoDeCarga] = 32;
-                    break;
-                case "push cx;":
-                    mem[indice + enderecoDeCarga] = 33;
-                    break;
-                case "push bp;":
-                    mem[indice + enderecoDeCarga] = 34;
-                    break;
-                case "pop bp;":
-                    mem[indice + enderecoDeCarga] = 35;
-                    break;
-                case "pop cx;":
-                    mem[indice + enderecoDeCarga] = 36;
-                    break;
-                case "pop bx;":
-                    mem[indice + enderecoDeCarga] = 37;
-                    break;
-                case "pop ax;":
-                    mem[indice + enderecoDeCarga] = 38;
-                    break;
-                case "nop;":
-                    mem[indice + enderecoDeCarga] = 39;
-                    break;
-                case "halt;":
-                    mem[indice + enderecoDeCarga] = 40;
-                    break;
-                case "dec sp;":
-                    mem[indice + enderecoDeCarga] = 41;
-                    break;
-                case "move [bp-":
-                    mem[indice + enderecoDeCarga] = 42;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "move [bp+":
-                    mem[indice + enderecoDeCarga] = 43;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "move ax,{":
-                    mem[indice + enderecoDeCarga] = 44;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "test axEqbx,":
-                    mem[indice + enderecoDeCarga] = 45;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "inc sp;":
-                    mem[indice + enderecoDeCarga] = 46;
-                    break;
-                case "move ax,sp;":
-                    mem[indice + enderecoDeCarga] = 47;
-                    break;
-                case "move sp,ax;":
-                    mem[indice + enderecoDeCarga] = 48;
-                    break;
-                case "move ax,bp;":
-                    mem[indice + enderecoDeCarga] = 49;
-                    break;
-                case "move bp,ax;":
-                    mem[indice + enderecoDeCarga] = 50;
-                    break;
-                case "iret;":
-                    mem[indice + enderecoDeCarga] = 51;
-                    break;
-                case "int ":
-                    mem[indice + enderecoDeCarga] = 52;
-                    mem[++indice + enderecoDeCarga] = valorEstatico;
-                    break;
-                case "sub bx,ax;":
-                    mem[indice + enderecoDeCarga] = 53;
-                    break;
+        for (int i = 0; i < codigo.length; i++) {
+            linha = codigo[i];
+            if (linha != null && !"".equals(linha)) {              
+                if (linha.contains("[bx+")) {
+                    instFinal = linha.substring(0, linha.indexOf("[bx+")+4);
+                    valorEstatico = Short.parseShort(linha.substring(linha.indexOf("[bx+")+4, linha.indexOf("]")));
+                } else if (linha.contains("[bp+")) {
+                    instFinal = linha.substring(0, linha.indexOf("[bp+")+4);
+                    valorEstatico = Short.parseShort(linha.substring(linha.indexOf("[bp+")+4, linha.indexOf("]")));
+                } else if (linha.contains("[bp-")) {
+                    instFinal = linha.substring(0, linha.indexOf("[bp-")+4);
+                    valorEstatico = Short.parseShort(linha.substring(linha.indexOf("[bp-")+4, linha.indexOf("]")));
+                } else if (linha.contains("[")) {
+                    instFinal = linha.substring(0, linha.indexOf("[")+1);
+                    valorEstatico = Short.parseShort(linha.substring(linha.indexOf("[")+1, linha.indexOf("]")));
+                } else if (linha.contains("{")) { 
+                    instFinal = linha.substring(0, linha.indexOf("{")+1);
+                    valorEstatico = Short.parseShort(linha.substring(linha.indexOf("{")+1, linha.indexOf("}")));
+                } else if (linha.contains("jmp")) {
+                    instFinal = "jmp ";
+                    valorEstatico = Short.parseShort(linha.substring(linha.indexOf("jmp ")+4, linha.indexOf(";")));
+                } else if (linha.contains("int")) {
+                    instFinal = "int ";
+                    valorEstatico = Short.parseShort(linha.substring(linha.indexOf("int ")+4, linha.indexOf(";")));
+                } else if (linha.contains("call")) {
+                    instFinal = "call ";
+                    valorEstatico = Short.parseShort(linha.substring(linha.indexOf("call ")+5, linha.indexOf(";")));
+                } else if (linha.contains("test ax0,")) {
+                    instFinal = "test ax0,";
+                    valorEstatico = Short.parseShort(linha.substring(linha.indexOf(",")+1, linha.indexOf(";")));
+                } else if (linha.contains("test axEqbx,")) {
+                    instFinal = "test axEqbx,";
+                    valorEstatico = Short.parseShort(linha.substring(linha.indexOf(",")+1, linha.indexOf(";")));
+                } else {
+                    instFinal = linha;
+                }   
+
+                switch (instFinal) {
+                    case "init ax;":
+                        mem[indice + enderecoDeCarga] = 0;
+                        break;
+                    case "move ax,bx;":
+                        mem[indice + enderecoDeCarga] = 1;
+                        break;
+                    case "move ax,cx;":
+                        mem[indice + enderecoDeCarga] = 2;
+                        break;
+                    case "move bx,ax;":
+                        mem[indice + enderecoDeCarga] = 3;
+                        break;
+                    case "move cx,ax;":
+                        mem[indice + enderecoDeCarga] = 4;
+                        break;
+                    case "move ax,[":
+                        mem[indice + enderecoDeCarga] = 5;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "move ax,[bx+":
+                        mem[indice + enderecoDeCarga] = 6;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "move ax,[bp-":
+                        mem[indice + enderecoDeCarga] = 7;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "move ax,[bp+":
+                        mem[indice + enderecoDeCarga] = 8;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "move [":
+                        mem[indice + enderecoDeCarga] = 9;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "move [bx+":
+                        mem[indice + enderecoDeCarga] = 10;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "move bp,sp;":
+                        mem[indice + enderecoDeCarga] = 11;
+                        break;
+                    case "move sp,bp;":
+                        mem[indice + enderecoDeCarga] = 12;
+                        break;
+                    case "add ax,bx;":
+                        mem[indice + enderecoDeCarga] = 13;
+                        break;
+                    case "add ax,cx;":
+                        mem[indice + enderecoDeCarga] = 14;
+                        break;
+                    case "add bx,cx;":
+                        mem[indice + enderecoDeCarga] = 15;
+                        break;
+                    case "sub ax,bx;":
+                        mem[indice + enderecoDeCarga] = 16;
+                        break;
+                    case "sub ax,cx;":
+                        mem[indice + enderecoDeCarga] = 17;
+                        break;
+                    case "sub bx,cx;":
+                        mem[indice + enderecoDeCarga] = 18;
+                        break;
+                    case "inc ax;":
+                        mem[indice + enderecoDeCarga] = 19;
+                        break;
+                    case "inc bx;":
+                        mem[indice + enderecoDeCarga] = 20;
+                        break;
+                    case "inc cx;":
+                        mem[indice + enderecoDeCarga] = 21;
+                        break;
+                    case "dec ax;":
+                        mem[indice + enderecoDeCarga] = 22;
+                        break;
+                    case "dec bx;":
+                        mem[indice + enderecoDeCarga] = 23;
+                        break;
+                    case "dec cx;":
+                        mem[indice + enderecoDeCarga] = 24;
+                        break;
+                    case "test ax0,":
+                        mem[indice + enderecoDeCarga] = 25;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "jmp ":
+                        mem[indice + enderecoDeCarga] = 26;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "call ":
+                        mem[indice + enderecoDeCarga] = 27;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "ret;":
+                        mem[indice + enderecoDeCarga] = 28;
+                        break;
+                    case "in ax;":
+                        mem[indice + enderecoDeCarga] = 29;
+                        break;
+                    case "out ax;":
+                        mem[indice + enderecoDeCarga] = 30;
+                        break;
+                    case "push ax;":
+                        mem[indice + enderecoDeCarga] = 31;
+                        break;
+                    case "push bx;":
+                        mem[indice + enderecoDeCarga] = 32;
+                        break;
+                    case "push cx;":
+                        mem[indice + enderecoDeCarga] = 33;
+                        break;
+                    case "push bp;":
+                        mem[indice + enderecoDeCarga] = 34;
+                        break;
+                    case "pop bp;":
+                        mem[indice + enderecoDeCarga] = 35;
+                        break;
+                    case "pop cx;":
+                        mem[indice + enderecoDeCarga] = 36;
+                        break;
+                    case "pop bx;":
+                        mem[indice + enderecoDeCarga] = 37;
+                        break;
+                    case "pop ax;":
+                        mem[indice + enderecoDeCarga] = 38;
+                        break;
+                    case "nop;":
+                        mem[indice + enderecoDeCarga] = 39;
+                        break;
+                    case "halt;":
+                        mem[indice + enderecoDeCarga] = 40;
+                        break;
+                    case "dec sp;":
+                        mem[indice + enderecoDeCarga] = 41;
+                        break;
+                    case "move [bp-":
+                        mem[indice + enderecoDeCarga] = 42;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "move [bp+":
+                        mem[indice + enderecoDeCarga] = 43;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "move ax,{":
+                        mem[indice + enderecoDeCarga] = 44;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "test axEqbx,":
+                        mem[indice + enderecoDeCarga] = 45;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "inc sp;":
+                        mem[indice + enderecoDeCarga] = 46;
+                        break;
+                    case "move ax,sp;":
+                        mem[indice + enderecoDeCarga] = 47;
+                        break;
+                    case "move sp,ax;":
+                        mem[indice + enderecoDeCarga] = 48;
+                        break;
+                    case "move ax,bp;":
+                        mem[indice + enderecoDeCarga] = 49;
+                        break;
+                    case "move bp,ax;":
+                        mem[indice + enderecoDeCarga] = 50;
+                        break;
+                    case "iret;":
+                        mem[indice + enderecoDeCarga] = 51;
+                        break;
+                    case "int ":
+                        mem[indice + enderecoDeCarga] = 52;
+                        mem[++indice + enderecoDeCarga] = valorEstatico;
+                        break;
+                    case "sub bx,ax;":
+                        mem[indice + enderecoDeCarga] = 53;
+                        break;
+                }
+                indice++;
             }
-            indice++;
-            codigo = codigo[1].split("\n");
-            linha = codigo[0];
         }
         decodificador(-1, enderecoDeCarga);
     }
