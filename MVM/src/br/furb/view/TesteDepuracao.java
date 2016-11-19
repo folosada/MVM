@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.furb.interfaceGrafica;
+package br.furb.view;
 
+import br.furb.nucleo.MVM;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.io.IOException;
 import javax.swing.JScrollBar;
 
 /**
@@ -96,7 +98,6 @@ public class TesteDepuracao extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbDepurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDepurarActionPerformed
-        int qtdLinhasDepuradas = this.jtaPos.getLineCount();
         this.jtaPos.append("\n");
         this.setBreakpoint();
         this.depurarExecucaoBreakPoint();

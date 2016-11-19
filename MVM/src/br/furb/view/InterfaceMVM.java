@@ -3,21 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.furb.interfaceGrafica;
+package br.furb.view;
 
 import br.furb.nucleo.MVM;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.stage.FileChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -199,11 +193,8 @@ public class InterfaceMVM extends javax.swing.JFrame {
     }//GEN-LAST:event_salvarJBActionPerformed
 
     private void executarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executarJBActionPerformed
-        try {
-            mattosMachine.traduzirCodigoFonte(codigoFonteJTA.getText(), 0);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Houve um problema ao executar o código-fonte.");
-        }
+        CodeCompiler codeCompiler = new CodeCompiler();
+        codeCompiler.init(this.codigoFonteJTA.getText());
     }//GEN-LAST:event_executarJBActionPerformed
 
     /**
