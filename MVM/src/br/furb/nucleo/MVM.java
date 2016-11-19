@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -458,7 +460,9 @@ public class MVM {
         boolean repetir = true;
         ip = 0 + aux;
         
-        String stack = "";
+        Map<EnumData, List<String>> datas = new HashMap<>();
+        List<String> registradores = new ArrayList<>();
+        List<String> stack = new ArrayList<>();
 
 
         while (repetir) {
@@ -637,6 +641,7 @@ public class MVM {
 
                 case 30://"out ax"
                     System.out.println("Saida: AX=" + ax);
+                    datas.put(EnumData.OUT, Arrays.asList(Integer.toString(ax)));
                     break;
 
                 case 31://"push ax"
@@ -789,8 +794,21 @@ public class MVM {
             }
 
             ip++;
+            
+            stack.add(Integer.toString(ri));
             //System.out.println("IP - " + ip);
         }
+        
+        registradores.add("AX = " + ax);
+        registradores.add("BX = " + bx);
+        registradores.add("CX = " + cx);
+        registradores.add("SP = " + sp);
+        registradores.add("BP = " + bp);
+        registradores.add("IP = " + ip);
+        
+        datas.put(EnumData.REGISTRADORES, registradores);
+        datas.put(EnumData.STACK, registradores);
+        
         /**
          System.out.println("Valor de AX: " + ax);
          System.out.println("Valor de BX: " + bx);

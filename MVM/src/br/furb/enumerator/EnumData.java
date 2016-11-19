@@ -10,7 +10,6 @@ package br.furb.enumerator;
  * @author Gabriel Bernardi
  */
 public enum EnumData {
-    HORA,
     REGISTRADORES,
     STACK,
     OUT;

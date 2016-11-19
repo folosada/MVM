@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.furb.view;
+package br.furb.interfaces;
 
 import br.furb.nucleo.MVM;
 import java.io.BufferedReader;

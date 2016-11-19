@@ -6,27 +6,31 @@
 package br.furb.view;
 
 import br.furb.nucleo.MVM;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.Container;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Gabriel Bernardi
  */
-public class CodeCompiler extends javax.swing.JFrame {
-    
+public class CodeCompilerDialog extends javax.swing.JDialog {
+
     private String code;
     
     /**
-     * Creates new form CodeCompiler
+     * Creates new form CodeCompilerDialog
      */
-    public CodeCompiler() {
+    public CodeCompilerDialog(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        this.setLocationRelativeTo(null);
     }
 
+    public CodeCompilerDialog(Object parent) {
+        super((JFrame) parent, true);
+        initComponents();
+    }
+    
     public void init(String code){
         this.code = code;
         this.codigoFonteJTA.setText(code);
@@ -53,7 +57,7 @@ public class CodeCompiler extends javax.swing.JFrame {
         codigoFonteJTA = new javax.swing.JTextArea();
         linhaJTF = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         fundoJP.setPreferredSize(new java.awt.Dimension(800, 600));
         fundoJP.setLayout(new java.awt.GridBagLayout());
@@ -138,7 +142,7 @@ public class CodeCompiler extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void stepJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepJBActionPerformed
-        
+
     }//GEN-LAST:event_stepJBActionPerformed
 
     private void runJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runJBActionPerformed
@@ -170,20 +174,27 @@ public class CodeCompiler extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CodeCompiler.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CodeCompilerDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CodeCompiler.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CodeCompilerDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CodeCompiler.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CodeCompilerDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CodeCompiler.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CodeCompilerDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CodeCompiler().setVisible(true);
+                CodeCompilerDialog dialog = new CodeCompilerDialog(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
