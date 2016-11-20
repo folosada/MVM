@@ -215,7 +215,7 @@ public class MVM {
         arquivo.close();
     }
     
-    public static void traduzirCodigoFonte(String codigoFonte, int enderecoDeCarga, boolean isRun) throws IOException {        
+    public static Map<EnumData, List<String>> traduzirCodigoFonte(String codigoFonte, int enderecoDeCarga, boolean isRun) throws IOException {        
         int indice = 0;
         
         String [] codigo = codigoFonte.split("\n");
@@ -441,12 +441,13 @@ public class MVM {
             }
         }
         
-        Map<EnumData, List<String>> teste = new HashMap<>();
+        Map<EnumData, List<String>> datas = new HashMap<>();
         if (isRun){
-            teste = decodificadorRun(-1, enderecoDeCarga);
+            datas = MVM.decodificadorRun(-1, enderecoDeCarga);
         } else {
-            decodificadorStep(-1, enderecoDeCarga);
+            MVM.decodificadorStep(-1, enderecoDeCarga);
         }
+        return datas;
     }
     
     private static void decodificadorStep(int programa, int aux) {
@@ -463,10 +464,10 @@ public class MVM {
         Map<EnumData, List<String>> datas = new HashMap<>();
         List<String> registradores = new ArrayList<>();
         List<String> stack = new ArrayList<>();
-
+        List<String> logs = new ArrayList<>();
 
         while (repetir) {
-            System.out.println("Valor de IP: " + ip);
+            logs.add("Valor de IP: " + ip);
             if (botao == 1) {
                     //"push ip" 
                     mem[sp] = (short) ip;
@@ -490,7 +491,7 @@ public class MVM {
 
                     ip = mem[0];
                     botao = 0;
-                System.out.println("EXECUTOU INTERRUPCAO: INT3");
+                logs.add("EXECUTOU INTERRUPCAO: INT3");
             }
 
             ri = mem[ip];
@@ -516,37 +517,37 @@ public class MVM {
 
                 case 5:// "move ax,[",
                     ax = mem[mem[ip + 1]];
-                    System.out.println("Executou move ax,[" + mem[ip + 1] + "]");
+                    logs.add("Executou move ax,[" + mem[ip + 1] + "]");
                     ip++;
                     break;
 
                 case 6:// "move ax,[bx+"
                     ax = mem[bx+mem[ip+1]];
-                    System.out.println("Executou move ax, [bx+" + mem[ip+1]+ "]");
+                    logs.add("Executou move ax, [bx+" + mem[ip+1]+ "]");
                     ip++;
                     break;
 
                 case 7:// "move ax,[bp-"
                     ax = mem[bp - mem[ip+1]];
-                    System.out.println("Executou move ax, [bx-" + mem[ip+1]+ "]");
+                    logs.add("Executou move ax, [bx-" + mem[ip+1]+ "]");
                     ip ++;
                     break;
 
                 case 8://"move ax,[bp+"
                     ax = mem[bp+mem[ip+1]];
-                    System.out.println("Executou move ax, [bp+" + mem[ip+1]+ "]");
+                    logs.add("Executou move ax, [bp+" + mem[ip+1]+ "]");
                     ip++;
                     break;
 
                 case 9://"move ["
                     mem[mem[ip + 1]] = (short) ax;
-                    System.out.println("Executou move [" + mem[ip+1]+ "],ax");
+                    logs.add("Executou move [" + mem[ip+1]+ "],ax");
                     ip++;
                     break;
 
                 case 10://"move [bx+"
                     mem[bx + mem[ip+1]] = (short) ax;
-                    System.out.println("Executou move [bx+" + mem[ip+1]+ "],ax");
+                    logs.add("Executou move [bx+" + mem[ip+1]+ "],ax");
                     ip ++;
                     break;
 
@@ -711,11 +712,11 @@ public class MVM {
                 case 45://"test axEqbx,"
                     if (ax == bx) {
                         ip = mem[ip + 1]-1;
-                        System.out.println("Executou THEN test axEqbx -> ip"+ mem[ip+1]);
+                        logs.add("Executou THEN test axEqbx -> ip"+ mem[ip+1]);
                     } else {
 
                         ip++;
-                        System.out.println("Executou ELSE test axEqbx -> ip" + ip);
+                        logs.add("Executou ELSE test axEqbx -> ip" + ip);
                     }
                     break;
 
@@ -784,11 +785,11 @@ public class MVM {
                     
                 default: {
                     repetir = false;
-                    System.out.println("Saiu");
+                    logs.add("Saiu");
                 }
 
                 if (ip >= mem.length) {
-                    System.out.println("ERRO: a memoria nao pode ser lida");
+                    logs.add("ERRO: a memoria nao pode ser lida");
                     repetir = false;
                 }
             }
@@ -807,7 +808,8 @@ public class MVM {
         registradores.add("IP = " + ip);
         
         datas.put(EnumData.REGISTRADORES, registradores);
-        datas.put(EnumData.STACK, registradores);
+        datas.put(EnumData.STACK, stack);
+        datas.put(EnumData.LOG, logs);
         
         /**
          System.out.println("Valor de AX: " + ax);
@@ -822,6 +824,6 @@ public class MVM {
          System.out.println("Valor de mem[12]: " + mem[12]);
          System.out.println("Valor de mem[11]: " + mem[11]);
          **/
-        return null;
+        return datas;
     }
 }

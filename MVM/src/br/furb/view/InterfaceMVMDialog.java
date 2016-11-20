@@ -27,6 +27,8 @@ public class InterfaceMVMDialog extends javax.swing.JDialog {
     public InterfaceMVMDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
+        this.codigoFonteJTA.setBorder(new NumberedBorder());
     }
 
     /**
@@ -188,8 +190,12 @@ public class InterfaceMVMDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_salvarJBActionPerformed
 
     private void executarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executarJBActionPerformed
-        CodeCompilerDialog codeCompiler = new CodeCompilerDialog(this.getParent());
-        codeCompiler.init(this.codigoFonteJTA.getText());
+        if (this.disableEnableBtnExecutar()){
+            CodeCompilerDialog codeCompiler = new CodeCompilerDialog(this.getParent());
+            codeCompiler.init(this.codigoFonteJTA.getText());
+        } else {
+            JOptionPane.showMessageDialog(this, "O código do programa a ser executado deve ser informado.");
+        }
     }//GEN-LAST:event_executarJBActionPerformed
 
     /**
@@ -245,4 +251,9 @@ public class InterfaceMVMDialog extends javax.swing.JDialog {
     private javax.swing.JTextField linhaJTF;
     private javax.swing.JButton salvarJB;
     // End of variables declaration//GEN-END:variables
+
+    private boolean disableEnableBtnExecutar() {
+        return this.codigoFonteJTA.getText() != null
+                && !"".equals(this.codigoFonteJTA.getText());
+    }
 }

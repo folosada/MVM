@@ -12,5 +12,6 @@ package br.furb.enumerator;
 public enum EnumData {
     REGISTRADORES,
     STACK,
-    OUT;
+    OUT,
+    LOG;
 }

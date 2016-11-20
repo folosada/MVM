@@ -5,8 +5,15 @@
  */
 package br.furb.view;
 
+import br.furb.enumerator.EnumData;
 import br.furb.nucleo.MVM;
-import java.awt.Container;
+import java.awt.Color;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -25,16 +32,37 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
-
+    
+    public CodeCompilerDialog(){}
+    
     public CodeCompilerDialog(Object parent) {
         super((JFrame) parent, true);
         initComponents();
+        this.setLocationRelativeTo(null);
+        this.codigoFonteJTA.setBorder(new NumberedBorder());
+        this.horaJTF.enable(false);
+        this.startRelogio();
+    }
+    
+    public void startRelogio() {
+        final SimpleDateFormat HHmmss = new SimpleDateFormat("HH:mm:ss");
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                horaJTF.setText(HHmmss.format(new Date()));
+            }
+        };
+        new Timer().scheduleAtFixedRate(task, 0, 1000);
+        try {
+            wait();
+        }
+        catch (Exception ex)
+        {}
     }
     
     public void init(String code){
         this.code = code;
         this.codigoFonteJTA.setText(code);
-        this.codigoFonteJTA.enable(false);
         this.setVisible(true);
     }
     
@@ -56,6 +84,13 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         codigoFonteJSP = new javax.swing.JScrollPane();
         codigoFonteJTA = new javax.swing.JTextArea();
         linhaJTF = new javax.swing.JTextField();
+        registradorJSP = new javax.swing.JScrollPane();
+        registradorJTA = new javax.swing.JTextArea();
+        stackJSP = new javax.swing.JScrollPane();
+        stackJTA = new javax.swing.JTextArea();
+        logJSP = new javax.swing.JScrollPane();
+        logJTA = new javax.swing.JTextArea();
+        horaJTF = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -113,15 +148,14 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
 
         codigoFonteJTA.setColumns(20);
         codigoFonteJTA.setRows(5);
+        codigoFonteJTA.setPreferredSize(new java.awt.Dimension(164, 110));
         codigoFonteJSP.setViewportView(codigoFonteJTA);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 12;
         gridBagConstraints.gridheight = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.9;
         fundoJP.add(codigoFonteJSP, gridBagConstraints);
 
@@ -136,6 +170,42 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         fundoJP.add(linhaJTF, gridBagConstraints);
 
+        registradorJTA.setColumns(20);
+        registradorJTA.setRows(5);
+        registradorJSP.setViewportView(registradorJTA);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        fundoJP.add(registradorJSP, gridBagConstraints);
+
+        stackJTA.setColumns(20);
+        stackJTA.setRows(5);
+        stackJSP.setViewportView(stackJTA);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        fundoJP.add(stackJSP, gridBagConstraints);
+
+        logJTA.setColumns(20);
+        logJTA.setRows(5);
+        logJSP.setViewportView(logJTA);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        gridBagConstraints.weightx = 1.0;
+        fundoJP.add(logJSP, gridBagConstraints);
+
+        horaJTF.setText("jTextField1");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        fundoJP.add(horaJTF, gridBagConstraints);
+
         getContentPane().add(fundoJP, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -147,14 +217,15 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
 
     private void runJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runJBActionPerformed
         try {
-            MVM.traduzirCodigoFonte(this.code, 0, true);
+            Map<EnumData, List<String>> datas = MVM.traduzirCodigoFonte(this.code, 0, true);
+            this.popularCampos(datas);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Falha na execução do programa.\nErro: " + e.getMessage());
         }
     }//GEN-LAST:event_runJBActionPerformed
 
     private void stopJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopJBActionPerformed
-
+        
     }//GEN-LAST:event_stopJBActionPerformed
 
     /**
@@ -204,9 +275,42 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
     private javax.swing.JTextArea codigoFonteJTA;
     private javax.swing.JToolBar ferramentaJTB;
     private javax.swing.JPanel fundoJP;
+    private javax.swing.JTextField horaJTF;
     private javax.swing.JTextField linhaJTF;
+    private javax.swing.JScrollPane logJSP;
+    private javax.swing.JTextArea logJTA;
+    private javax.swing.JScrollPane registradorJSP;
+    private javax.swing.JTextArea registradorJTA;
     private javax.swing.JButton runJB;
+    private javax.swing.JScrollPane stackJSP;
+    private javax.swing.JTextArea stackJTA;
     private javax.swing.JButton stepJB;
     private javax.swing.JButton stopJB;
     // End of variables declaration//GEN-END:variables
+
+    private void popularCampos(Map<EnumData, List<String>> datas){
+        if (datas.get(EnumData.REGISTRADORES) != null){
+            for (String reg : datas.get(EnumData.REGISTRADORES)) {
+                this.registradorJTA.append(reg + "\n");
+            }
+        }
+        
+        if (datas.get(EnumData.STACK) != null){
+            for (String stack : datas.get(EnumData.STACK)) {
+                this.stackJTA.append(stack + "\n");
+            }
+        }
+        
+        if (datas.get(EnumData.OUT) != null){
+            for (String out : datas.get(EnumData.OUT)) {
+                this.linhaJTF.setText(out);
+            }
+        }
+        
+        if (datas.get(EnumData.LOG) != null){
+            for (String log : datas.get(EnumData.LOG)) {
+                this.logJTA.append(log + "\n");
+            }
+        }
+    }
 }

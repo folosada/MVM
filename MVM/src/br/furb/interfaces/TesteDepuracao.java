@@ -55,6 +55,8 @@ public class TesteDepuracao extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane1.setVerticalScrollBar(jScrollPane2.getVerticalScrollBar());
+
         jtaCod.setColumns(20);
         jtaCod.setRows(5);
         jScrollPane1.setViewportView(jtaCod);
@@ -89,7 +91,7 @@ public class TesteDepuracao extends javax.swing.JFrame {
                 .addComponent(jbDepurar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
                     .addComponent(jScrollPane2))
                 .addContainerGap())
         );
@@ -110,16 +112,21 @@ public class TesteDepuracao extends javax.swing.JFrame {
             this.jtaPos.append("\n");
         }
         this.jtaPos.append("✓");
-        this.moverScrollCod();
+        this.moverScroll();
     }
     
-    private void moverScrollCod(){
-        
+    private void moverScroll(){
+//        this.jScrollPane1.getVerticalScrollBar().setValue(this.jtaPos.getHeight());
+//        if (jtaPos.getLineCount() > 15){
+//            this.jtaCod.setRows(jtaPos.getLineCount());
+//            this.jtaCod.setCaretPosition(jtaPos.getLineCount());
+            
+//        }
     }
     
     private void depurarExecucaoBreakPoint(){
-        String linhas[] = this.jtaCod.getText().split("\n");
-        String instrucao = linhas[this.jtaPos.getLineCount()-2];
+//        String linhas[] = this.jtaCod.getText().split("\n");
+//        String instrucao = linhas[this.jtaPos.getLineCount()-2];
     }
     
     /**
