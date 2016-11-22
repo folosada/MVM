@@ -12,6 +12,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -28,6 +32,24 @@ public class InterfaceMVM extends javax.swing.JFrame {
         initComponents();
         mattosMachine = new MVM();
         this.codigoFonteJTA.setBorder(new NumberedBorder());
+        this.linhaJTF.setHorizontalAlignment(this.linhaJTF.RIGHT);
+        startRelogio();
+    }
+    
+    public void startRelogio() {
+        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                linhaJTF.setText(sdf.format(new Date()));
+            }
+        };
+        new Timer().scheduleAtFixedRate(task, 0, 1000);
+        try {
+            wait();
+        }
+        catch (Exception ex)
+        {}
     }
 
     /**
@@ -122,6 +144,7 @@ public class InterfaceMVM extends javax.swing.JFrame {
 
         linhaJTF.setEditable(false);
         linhaJTF.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        linhaJTF.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;

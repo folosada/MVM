@@ -47,11 +47,11 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
     }
     
     public void startRelogio() {
-        final SimpleDateFormat HHmmss = new SimpleDateFormat("HH:mm:ss");
+        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                horaJTF.setText(HHmmss.format(new Date()));
+                horaJTF.setText(sdf.format(new Date()));
             }
         };
         new Timer().scheduleAtFixedRate(task, 0, 1000);
@@ -85,13 +85,21 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         stopJB = new javax.swing.JButton();
         codigoFonteJSP = new javax.swing.JScrollPane();
         codigoFonteJTA = new javax.swing.JTextArea();
-        linhaJTF = new javax.swing.JTextField();
         registradorJSP = new javax.swing.JScrollPane();
         registradorJTA = new javax.swing.JTextArea();
-        stackJSP = new javax.swing.JScrollPane();
-        stackJTA = new javax.swing.JTextArea();
         relogioJP = new javax.swing.JPanel();
         horaJTF = new javax.swing.JTextField();
+        stackJP = new javax.swing.JPanel();
+        stackJL = new javax.swing.JLabel();
+        stackJSP = new javax.swing.JScrollPane();
+        stackJTA = new javax.swing.JTextArea();
+        consoleJP = new javax.swing.JPanel();
+        consoleJSP = new javax.swing.JScrollPane();
+        consoleJTA = new javax.swing.JTextArea();
+        consoleJL = new javax.swing.JLabel();
+        saidaJP = new javax.swing.JPanel();
+        linhaJTF = new javax.swing.JTextField();
+        saidaJL = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -146,6 +154,7 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         fundoJP.add(ferramentaJTB, gridBagConstraints);
 
+        codigoFonteJTA.setEditable(false);
         codigoFonteJTA.setColumns(20);
         codigoFonteJTA.setRows(5);
         codigoFonteJTA.setPreferredSize(new java.awt.Dimension(164, 110));
@@ -155,22 +164,12 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 9;
+        gridBagConstraints.gridheight = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         fundoJP.add(codigoFonteJSP, gridBagConstraints);
 
-        linhaJTF.setEditable(false);
-        linhaJTF.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
-        gridBagConstraints.weightx = 1.0;
-        fundoJP.add(linhaJTF, gridBagConstraints);
-
+        registradorJTA.setEditable(false);
         registradorJTA.setColumns(20);
         registradorJTA.setRows(5);
         registradorJSP.setViewportView(registradorJTA);
@@ -178,24 +177,11 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        fundoJP.add(registradorJSP, gridBagConstraints);
-
-        stackJTA.setColumns(20);
-        stackJTA.setRows(5);
-        stackJSP.setViewportView(stackJTA);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridheight = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weighty = 1.0;
-        fundoJP.add(stackJSP, gridBagConstraints);
+        fundoJP.add(registradorJSP, gridBagConstraints);
 
         relogioJP.setLayout(new java.awt.BorderLayout());
 
@@ -211,6 +197,71 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         gridBagConstraints.ipady = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         fundoJP.add(relogioJP, gridBagConstraints);
+
+        stackJP.setLayout(new java.awt.BorderLayout());
+
+        stackJL.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        stackJL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        stackJL.setText("Stack:");
+        stackJP.add(stackJL, java.awt.BorderLayout.PAGE_START);
+
+        stackJTA.setEditable(false);
+        stackJTA.setColumns(20);
+        stackJTA.setRows(5);
+        stackJSP.setViewportView(stackJTA);
+
+        stackJP.add(stackJSP, java.awt.BorderLayout.CENTER);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
+        fundoJP.add(stackJP, gridBagConstraints);
+
+        consoleJP.setLayout(new java.awt.BorderLayout());
+
+        consoleJTA.setColumns(20);
+        consoleJTA.setRows(5);
+        consoleJSP.setViewportView(consoleJTA);
+
+        consoleJP.add(consoleJSP, java.awt.BorderLayout.CENTER);
+
+        consoleJL.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        consoleJL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        consoleJL.setText("Console:");
+        consoleJP.add(consoleJL, java.awt.BorderLayout.PAGE_START);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.weightx = 1.0;
+        fundoJP.add(consoleJP, gridBagConstraints);
+
+        saidaJP.setLayout(new java.awt.BorderLayout());
+
+        linhaJTF.setEditable(false);
+        linhaJTF.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        saidaJP.add(linhaJTF, java.awt.BorderLayout.CENTER);
+
+        saidaJL.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        saidaJL.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        saidaJL.setText("Saída:");
+        saidaJP.add(saidaJL, java.awt.BorderLayout.PAGE_START);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.weightx = 1.0;
+        fundoJP.add(saidaJP, gridBagConstraints);
 
         getContentPane().add(fundoJP, java.awt.BorderLayout.CENTER);
 
@@ -279,6 +330,10 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane codigoFonteJSP;
     private javax.swing.JTextArea codigoFonteJTA;
+    private javax.swing.JLabel consoleJL;
+    private javax.swing.JPanel consoleJP;
+    private javax.swing.JScrollPane consoleJSP;
+    private javax.swing.JTextArea consoleJTA;
     private javax.swing.JToolBar ferramentaJTB;
     private javax.swing.JPanel fundoJP;
     private javax.swing.JTextField horaJTF;
@@ -287,6 +342,10 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
     private javax.swing.JTextArea registradorJTA;
     private javax.swing.JPanel relogioJP;
     private javax.swing.JButton runJB;
+    private javax.swing.JLabel saidaJL;
+    private javax.swing.JPanel saidaJP;
+    private javax.swing.JLabel stackJL;
+    private javax.swing.JPanel stackJP;
     private javax.swing.JScrollPane stackJSP;
     private javax.swing.JTextArea stackJTA;
     private javax.swing.JButton stepJB;
