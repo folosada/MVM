@@ -193,8 +193,10 @@ public class InterfaceMVM extends javax.swing.JFrame {
     }//GEN-LAST:event_salvarJBActionPerformed
 
     private void executarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executarJBActionPerformed
-        CodeCompiler codeCompiler = new CodeCompiler();
-        codeCompiler.init(this.codigoFonteJTA.getText());
+        if (!"".equals(codigoFonteJTA.getText())) {
+            CodeCompilerDialog codeCompiler = new CodeCompilerDialog(this);
+            codeCompiler.init(this.codigoFonteJTA.getText());
+        }
     }//GEN-LAST:event_executarJBActionPerformed
 
     /**

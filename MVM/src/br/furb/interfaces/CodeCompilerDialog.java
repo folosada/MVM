@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.furb.view;
+package br.furb.interfaces;
 
 import br.furb.enumerator.EnumData;
 import br.furb.nucleo.MVM;
+import br.furb.interfaces.NumberedBorder;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,14 +34,15 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         initComponents();
     }
     
-    public CodeCompilerDialog(){}
+    public CodeCompilerDialog() {
+    }
     
     public CodeCompilerDialog(Object parent) {
         super((JFrame) parent, true);
         initComponents();
         this.setLocationRelativeTo(null);
         this.codigoFonteJTA.setBorder(new NumberedBorder());
-        this.horaJTF.enable(false);
+        this.horaJTF.setHorizontalAlignment(horaJTF.CENTER);
         this.startRelogio();
     }
     
@@ -60,7 +62,7 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         {}
     }
     
-    public void init(String code){
+    public void init(String code){       
         this.code = code;
         this.codigoFonteJTA.setText(code);
         this.setVisible(true);
@@ -88,8 +90,7 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         registradorJTA = new javax.swing.JTextArea();
         stackJSP = new javax.swing.JScrollPane();
         stackJTA = new javax.swing.JTextArea();
-        logJSP = new javax.swing.JScrollPane();
-        logJTA = new javax.swing.JTextArea();
+        relogioJP = new javax.swing.JPanel();
         horaJTF = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -126,7 +127,6 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
 
         stopJB.setText("Stop");
         stopJB.setFocusable(false);
-        stopJB.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         stopJB.setPreferredSize(new java.awt.Dimension(70, 35));
         stopJB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         stopJB.addActionListener(new java.awt.event.ActionListener() {
@@ -139,9 +139,9 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipady = 25;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.weightx = 1.0;
         fundoJP.add(ferramentaJTB, gridBagConstraints);
@@ -154,9 +154,10 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.9;
+        gridBagConstraints.weightx = 1.0;
         fundoJP.add(codigoFonteJSP, gridBagConstraints);
 
         linhaJTF.setEditable(false);
@@ -164,7 +165,7 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         gridBagConstraints.weightx = 1.0;
@@ -177,6 +178,10 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
         fundoJP.add(registradorJSP, gridBagConstraints);
 
         stackJTA.setColumns(20);
@@ -185,26 +190,27 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weighty = 1.0;
         fundoJP.add(stackJSP, gridBagConstraints);
 
-        logJTA.setColumns(20);
-        logJTA.setRows(5);
-        logJSP.setViewportView(logJTA);
+        relogioJP.setLayout(new java.awt.BorderLayout());
+
+        horaJTF.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        horaJTF.setEnabled(false);
+        horaJTF.setPreferredSize(new java.awt.Dimension(50, 20));
+        relogioJP.add(horaJTF, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
-        gridBagConstraints.weightx = 1.0;
-        fundoJP.add(logJSP, gridBagConstraints);
-
-        horaJTF.setText("jTextField1");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        fundoJP.add(horaJTF, gridBagConstraints);
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        fundoJP.add(relogioJP, gridBagConstraints);
 
         getContentPane().add(fundoJP, java.awt.BorderLayout.CENTER);
 
@@ -277,10 +283,9 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
     private javax.swing.JPanel fundoJP;
     private javax.swing.JTextField horaJTF;
     private javax.swing.JTextField linhaJTF;
-    private javax.swing.JScrollPane logJSP;
-    private javax.swing.JTextArea logJTA;
     private javax.swing.JScrollPane registradorJSP;
     private javax.swing.JTextArea registradorJTA;
+    private javax.swing.JPanel relogioJP;
     private javax.swing.JButton runJB;
     private javax.swing.JScrollPane stackJSP;
     private javax.swing.JTextArea stackJTA;
@@ -309,7 +314,7 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         
         if (datas.get(EnumData.LOG) != null){
             for (String log : datas.get(EnumData.LOG)) {
-                this.logJTA.append(log + "\n");
+//                this.logJTA.append(log + "\n");
             }
         }
     }
