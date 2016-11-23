@@ -28,6 +28,7 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
     
     private String code;
     private MVM mvm;
+    private boolean isRun;
     
     /**
      * Creates new form CodeCompilerDialog
@@ -70,6 +71,7 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
             this.codigoFonteJTA.setText(code);
             mvm = new MVM();
             mvm.traduzirCodigoFonte(this.code, 0);
+            this.isRun = false;
             this.setVisible(true);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao traduzir o código fonte: " + e.getMessage());
@@ -289,10 +291,14 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
 
     private void stepJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepJBActionPerformed
         try {
+            if (isRun){
+                this.init(code);
+            }
             mvm.executaInstrucao();
             this.limparCampos();
             this.popularCampos();
             this.verificaTerminoPrograma();
+            this.isRun = false;
         } catch (Exception ex) {
             Logger.getLogger(CodeCompilerDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -304,6 +310,7 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
             mvm.decodificador();
             this.limparCampos();
             this.popularCampos();
+            this.isRun = true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Falha na execução do programa.\nErro: " + e.getMessage());
         }
