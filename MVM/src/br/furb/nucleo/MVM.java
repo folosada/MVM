@@ -32,6 +32,7 @@ public class MVM {
         cx = 0;
         bp = 0;
         sp = 0;
+        ip = 0;
     }
     
     public void traduzirCodigoFonte(String codigoFonte, int enderecoDeCarga) throws IOException {        
@@ -667,7 +668,6 @@ public class MVM {
     }
     
     public void decodificador() {
-        ip = 0;
         boolean repetir = true;
         
         while (repetir) {
