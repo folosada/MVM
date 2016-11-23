@@ -423,20 +423,17 @@ public class MVM {
                 break;
 
             case 25://"test ax0,"
-                //REVISAR
                 if (ax == 0) {
                     ip = mem[ip + 1] - 1; //-1 para compensar o ip++ no laco
-                    traceCode.append("test ax0,").append(ip);
                 } else {
                     ip++;
-                    traceCode.append("test ax0,");
                 }
-
+                traceCode.append("test ax0,").append(mem[ip]);
                 break;
 
             case 26://"jmp "
                 ip = mem[ip + 1];
-                traceCode.append("jmp");
+                traceCode.append("jmp ").append(ip);
                 ip--;
                 break;
 
@@ -527,15 +524,15 @@ public class MVM {
                 break;
 
             case 42://"move [bp-"
-                //REVISAR
                 mem[bp - mem[ip + 1]] = (short) ax;
+                traceCode.append("move [bp-").append(mem[ip+1]).append("], ").append(ax);
                 ip++;
-                traceCode.append("move [bp-").append(ax).append("]");
                 break;
 
             case 43://"move [bp+"
-                //REVISAR
-                traceCode.append("move [bp+");
+                mem[bp + mem[ip + 1]] = (short) ax;
+                traceCode.append("move [bp+").append(mem[ip+1]).append("], ").append(ax);
+                ip++;
                 break;
 
             case 44://"move ax,{"
@@ -574,10 +571,9 @@ public class MVM {
                 traceCode.append("move ax,bp");
                 break;
 
-            case 50://"move bp,ax,{"
-                //REVISAR
+            case 50://"move bp,ax"
                 bp = ax;
-                traceCode.append("move bp,ax,{");
+                traceCode.append("move bp,ax");
                 break;
 
             case 51://"iret"
@@ -647,13 +643,14 @@ public class MVM {
     }
     
     private String calcularStack(){
-        StringBuilder stack = new StringBuilder();
-        for (int i = ip; i >= ip-4; i--) {
+        String stack = "";
+        
+        for (int i = sp; i >= sp-4; i--) {
             if (i >= 0){
-                stack.append(i).append("\n");
+                stack = "[" + (sp-i) + "] - " + mem[sp-i] + "\n" + stack;
             }
         }
-        return stack.toString();
+        return stack;
     }
     
     private String valorRegistradores(){
