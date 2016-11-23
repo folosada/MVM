@@ -219,6 +219,8 @@ public class InterfaceMVM extends javax.swing.JFrame {
         if (!"".equals(codigoFonteJTA.getText())) {
             CodeCompilerDialog codeCompiler = new CodeCompilerDialog(this);
             codeCompiler.init(this.codigoFonteJTA.getText());
+        } else {
+            JOptionPane.showMessageDialog(this, "O código do programa deve ser informado.");
         }
     }//GEN-LAST:event_executarJBActionPerformed
 

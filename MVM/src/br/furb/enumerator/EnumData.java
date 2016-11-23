@@ -13,5 +13,5 @@ public enum EnumData {
     REGISTRADORES,
     STACK,
     OUT,
-    LOG;
+    TRACE_CODE;
 }

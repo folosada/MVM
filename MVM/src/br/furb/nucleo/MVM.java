@@ -2,15 +2,7 @@ package br.furb.nucleo;
 
 
 import br.furb.enumerator.EnumData;
-import java.util.List;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -27,195 +19,22 @@ public class MVM {
 
     public static int botao = 0;
     private static short mem[] = new short[1024];
+    private Map<EnumData, String> datas;
+    StringBuilder traceCode;
+    int ax, bx, cx, bp, sp, ip, ri;
     
-    /**
-     * Descontinuada para este trabalho
-     * @param mem
-     * @param programa
-     * @param fimPrograma
-     * @param enderecoDeCarga
-     * @throws IOException 
-     */
-    private static void geraCodigoFonte(short mem[], int programa, int fimPrograma, int enderecoDeCarga) throws IOException {        
-        Path localArquivo = Paths.get("C:\\Temp\\programa.txt");
-        Files.deleteIfExists(localArquivo);
-        BufferedWriter arquivo = new BufferedWriter(new FileWriter(localArquivo.toFile()));        
-        String newLine = System.getProperty("line.separator");
-        arquivo.write("Programa: " + programa + newLine);
-        StringBuilder conteudoArquivo = new StringBuilder();
-        fimPrograma += enderecoDeCarga;
-        for (int ip = enderecoDeCarga; ip < fimPrograma; ip++) {
-            switch (mem[ip]) {
-                case 00:
-                    conteudoArquivo.append("init ax;").append(newLine);
-                    break;
-                case 1:
-                    conteudoArquivo.append("move ax,bx;").append(newLine);
-                    break;
-                case 2:
-                    conteudoArquivo.append("move ax,cx;").append(newLine);
-                    break;
-                case 3:
-                    conteudoArquivo.append("move bx,ax;").append(newLine);
-                    break;
-                case 4:
-                    conteudoArquivo.append("move cx,ax;").append(newLine);
-                    break;
-                case 5:
-                    conteudoArquivo.append("move ax,[").append(mem[++ip]).append("];").append(newLine);
-                    break;
-                case 6:
-                    conteudoArquivo.append("move ax,[bx+").append(mem[++ip]).append("];").append(newLine);
-                    break;
-                case 7:
-                    conteudoArquivo.append("move ax,[bp-").append(mem[++ip]).append("];").append(newLine);
-                    break;
-                case 8:
-                    conteudoArquivo.append("move ax,[bp+").append(mem[++ip]).append("];").append(newLine);
-                    break;
-                case 9:
-                    conteudoArquivo.append("move [").append(mem[++ip]).append("],ax;").append(newLine);
-                    break;
-                case 10:
-                    conteudoArquivo.append("move [bx+").append(mem[++ip]).append("],ax;").append(newLine);
-                    break;
-                case 11:
-                    conteudoArquivo.append("move bp,sp;").append(newLine);
-                    break;
-                case 12:
-                    conteudoArquivo.append("move sp,bp;").append(newLine);
-                    break;
-                case 13:
-                    conteudoArquivo.append("add ax,bx;").append(newLine);
-                    break;
-                case 14:
-                    conteudoArquivo.append("add ax,cx;").append(newLine);
-                    break;
-                case 15:
-                    conteudoArquivo.append("add bx,cx;").append(newLine);
-                    break;
-                case 16:
-                    conteudoArquivo.append("sub ax,bx;").append(newLine);
-                    break;
-                case 17:
-                    conteudoArquivo.append("sub ax,cx;").append(newLine);
-                    break;
-                case 18:
-                    conteudoArquivo.append("sub bx,cx;").append(newLine);
-                    break;
-                case 19:
-                    conteudoArquivo.append("inc ax;").append(newLine);
-                    break;
-                case 20:
-                    conteudoArquivo.append("inc bx;").append(newLine);
-                    break;
-                case 21:
-                    conteudoArquivo.append("inc cx;").append(newLine);
-                    break;
-                case 22:
-                    conteudoArquivo.append("dec ax;").append(newLine);
-                    break;
-                case 23:
-                    conteudoArquivo.append("dec bx;").append(newLine);
-                    break;
-                case 24:
-                    conteudoArquivo.append("dec cx;").append(newLine);
-                    break;
-                case 25:
-                    conteudoArquivo.append("test ax0,").append(mem[++ip]).append(";").append(newLine);
-                    break;
-                case 26:
-                    conteudoArquivo.append("jmp ").append(mem[++ip]).append(";").append(newLine);
-                    break;
-                case 27:
-                    conteudoArquivo.append("call ").append(mem[++ip]).append(";").append(newLine);
-                    break;
-                case 28:
-                    conteudoArquivo.append("ret;").append(newLine);
-                    break;
-                case 29:
-                    conteudoArquivo.append("in ax;").append(newLine);
-                    break;
-                case 30:
-                    conteudoArquivo.append("out ax;").append(newLine);
-                    break;
-                case 31:
-                    conteudoArquivo.append("push ax;").append(newLine);
-                    break;
-                case 32:
-                    conteudoArquivo.append("push bx;").append(newLine);
-                    break;
-                case 33:
-                    conteudoArquivo.append("push cx;").append(newLine);
-                    break;
-                case 34:
-                    conteudoArquivo.append("push bp;").append(newLine);
-                    break;
-                case 35:
-                    conteudoArquivo.append("pop bp;").append(newLine);
-                    break;
-                case 36:
-                    conteudoArquivo.append("pop cx;").append(newLine);
-                    break;
-                case 37:
-                    conteudoArquivo.append("pop bx;").append(newLine);
-                    break;
-                case 38:
-                    conteudoArquivo.append("pop ax;").append(newLine);
-                    break;
-                case 39:
-                    conteudoArquivo.append("nop;").append(newLine);
-                    break;
-                case 40:
-                    conteudoArquivo.append("halt;").append(newLine);
-                    break;
-                case 41:
-                    conteudoArquivo.append("dec sp;").append(newLine);
-                    break;
-                case 42:
-                    conteudoArquivo.append("move [bp-").append(mem[++ip]).append("], ax;").append(newLine);
-                    break;
-                case 43:
-                    conteudoArquivo.append("move [bp+").append(mem[++ip]).append("], ax;").append(newLine);
-                    break;
-                case 44:
-                    conteudoArquivo.append("move ax,{").append(mem[++ip]).append("};").append(newLine);
-                    break;
-                case 45:
-                    conteudoArquivo.append("test axEqbx,").append(mem[++ip]).append(";").append(newLine);
-                    break;
-                case 46:
-                    conteudoArquivo.append("inc sp;").append(newLine);
-                    break;
-                case 47:
-                    conteudoArquivo.append("move ax,sp;").append(newLine);
-                    break;
-                case 48:
-                    conteudoArquivo.append("move sp,ax;").append(newLine);
-                    break;
-                case 49:
-                    conteudoArquivo.append("move ax,bp;").append(newLine);
-                    break;
-                case 50:
-                    conteudoArquivo.append("move bp,ax;").append(newLine);
-                    break;
-                case 51:
-                    conteudoArquivo.append("iret;").append(newLine);
-                    break;
-                case 52:
-                    conteudoArquivo.append("int ").append(mem[++ip]).append(";").append(newLine);
-                    break;
-                case 53:
-                    conteudoArquivo.append("sub bx,ax;").append(newLine);
-                    break;
-            }
-        }
-        arquivo.write(conteudoArquivo.toString());
-        arquivo.flush();
-        arquivo.close();
+    public MVM(){
+        botao = 0;
+        datas = new HashMap<>();
+        traceCode = new StringBuilder();
+        ax = 0;
+        bx = 0;
+        cx = 0;
+        bp = 0;
+        sp = 0;
     }
     
-    public static Map<EnumData, List<String>> traduzirCodigoFonte(String codigoFonte, int enderecoDeCarga, boolean isRun) throws IOException {        
+    public void traduzirCodigoFonte(String codigoFonte, int enderecoDeCarga) throws IOException {        
         int indice = 0;
         
         String [] codigo = codigoFonte.split("\n");
@@ -440,390 +259,422 @@ public class MVM {
                 indice++;
             }
         }
-        
-        Map<EnumData, List<String>> datas = new HashMap<>();
-        if (isRun){
-            datas = MVM.decodificadorRun(-1, enderecoDeCarga);
-        } else {
-            MVM.decodificadorStep(-1, enderecoDeCarga);
-        }
-        return datas;
     }
     
-    private static void decodificadorStep(int programa, int aux) {
-        int ax = 0, bx = 0, cx = 0, bp = 0, sp = 0, ip, ri;
+    public boolean executaInstrucao(){
         boolean repetir = true;
-        ip = 0 + aux;
-    }
-    
-    private static Map<EnumData, List<String>> decodificadorRun(int programa, int aux) {
-        int ax = 0, bx = 0, cx = 0, bp = 0, sp = 0, ip, ri;
-        boolean repetir = true;
-        ip = 0 + aux;
         
-        Map<EnumData, List<String>> datas = new HashMap<>();
-        List<String> registradores = new ArrayList<>();
-        List<String> stack = new ArrayList<>();
-        List<String> logs = new ArrayList<>();
+        if (botao == 1) {
+            //"push ip" 
+            mem[sp] = (short) ip;
+            sp--;
 
+            //"push bp" 
+            mem[sp] = (short) bp;
+            sp--;
+
+            //"push ax" 
+            mem[sp] = (short) ax;
+            sp--;
+
+            //"push bx" 
+            mem[sp] = (short) bx;
+            sp--;
+
+            //"push cx" 
+            mem[sp] = (short) cx;
+            sp--;
+
+            ip = mem[0];
+            botao = 0;
+        }
+
+        ri = mem[ip];
+        switch (ri) {
+            case 0:// "init ax"
+                ax = 0;
+                traceCode.append("init ax");
+                break;
+
+            case 1:// "move ax,bx"
+                ax = bx;
+                traceCode.append("move ax,bx");
+                break;
+            case 2:// "move ax,cx",
+                ax = cx;
+                traceCode.append("move ax,cx");
+                break;
+
+            case 3:// "move bx,ax"
+                bx = ax;
+                traceCode.append("move bx,ax");
+                break;
+
+            case 4:// "move cx,ax"
+                cx = ax;
+                traceCode.append("move cx,ax");
+                break;
+
+            case 5:// "move ax,[",
+                ax = mem[mem[ip + 1]];
+                traceCode.append("move ax,[").append(mem[ip + 1]).append("]");
+                ip++;
+                break;
+
+            case 6:// "move ax,[bx+"
+                ax = mem[bx+mem[ip+1]];
+                traceCode.append("move ax, [bx+").append(mem[ip+1]).append("]");
+                ip++;
+                break;
+
+            case 7:// "move ax,[bp-"
+                ax = mem[bp - mem[ip+1]];
+                traceCode.append("move ax, [bx-").append(mem[ip+1]).append("]");
+                ip ++;
+                break;
+
+            case 8://"move ax,[bp+"
+                ax = mem[bp+mem[ip+1]];
+                traceCode.append("move ax, [bp+").append(mem[ip+1]).append("]");
+                ip++;
+                break;
+
+            case 9://"move ["
+                mem[mem[ip + 1]] = (short) ax;
+                traceCode.append("move [").append(mem[ip+1]).append("],ax");
+                ip++;
+                break;
+
+            case 10://"move [bx+"
+                mem[bx + mem[ip+1]] = (short) ax;
+                traceCode.append("move [bx+").append(mem[ip+1]).append("],ax");
+                ip ++;
+                break;
+
+            case 11://"move bp,sp"
+                bp = sp;
+                traceCode.append("move bp,sp");
+                break;
+
+            case 12://"move sp,bp"
+                sp = bp;traceCode.append("move sp,bp");
+                        
+                break;
+
+            case 13://"add ax,bx"
+                ax = ax + bx;
+                traceCode.append("add ax,bx");
+                break;
+
+            case 14://"add ax,cx"
+                ax = ax + cx;
+                traceCode.append("add ax,cx");
+                break;
+
+            case 15://"add bx,cx"
+                bx = bx + cx;
+                traceCode.append("add bx,cx");
+                break;
+
+            case 16://"sub ax,bx"
+                ax = ax - bx;
+                traceCode.append("sub ax,bx");
+                break;
+
+            case 17://"sub ax,cx"
+                ax = ax - cx;
+                traceCode.append("sub ax,cx");
+                break;
+
+            case 18://"sub bx,cx"
+                bx = bx - cx;
+                traceCode.append("sub bx,cx");
+                break;
+
+            case 19://"inc ax"
+                ax++;
+                traceCode.append("inc ax");
+                break;
+
+            case 20://"inc bx"
+                bx++;
+                traceCode.append("inc bx");
+                break;
+
+            case 21://"inc cx"
+                cx++;
+                traceCode.append("inc cx");
+                break;
+
+            case 22://"dec ax"
+                ax--;
+                traceCode.append("dec ax");
+                break;
+
+            case 23://"dec bx"
+                bx--;
+                traceCode.append("dec bx");
+                break;
+
+            case 24://"dec cx"
+                cx--;
+                traceCode.append("dec cx");
+                break;
+
+            case 25://"test ax0,"
+                //REVISAR
+                if (ax == 0) {
+                    ip = mem[ip + 1] - 1; //-1 para compensar o ip++ no laco
+                    traceCode.append("test ax0,").append(ip);
+                } else {
+                    ip++;
+                    traceCode.append("test ax0,");
+                }
+
+                break;
+
+            case 26://"jmp "
+                ip = mem[ip + 1];
+                traceCode.append("jmp");
+                ip--;
+                break;
+
+            case 27://"call"
+                mem[sp] = (short) (ip + 2);
+                sp--;
+                ip = mem[ip + 1];
+                ip--; //para compensar a alteracao de ip
+                traceCode.append("call");
+                break;
+
+            case 28://"ret"
+                sp++;
+                ip = mem[sp];
+                ip--;
+                traceCode.append("ret");
+                break;
+
+            case 29://"in ax"
+                ax = Integer.parseInt(JOptionPane.showInputDialog("ax:"));
+                break;
+
+            case 30://"out ax"
+                datas.put(EnumData.OUT, Integer.toString(ax));
+                traceCode.append("out ax");
+                break;
+
+            case 31://"push ax"
+                mem[sp] = (short) ax;
+                sp--;
+                traceCode.append("push ax");
+                break;
+
+            case 32://"push bx"
+                mem[sp] = (short) bx;
+                sp--;
+                traceCode.append("push bx");
+                break;
+
+            case 33://"push cx"
+                mem[sp] = (short) cx;
+                sp--;
+                traceCode.append("push cx");
+                break;
+
+            case 34://"push bp"
+                mem[sp] = (short) bp;
+                sp--;
+                traceCode.append("push bp");
+                break;
+
+            case 35://"pop bp"
+                sp++;
+                bp = mem[sp];
+                traceCode.append("pop bp");
+                break;
+
+            case 36://"pop cx"
+                sp++;
+                cx = mem[sp];
+                traceCode.append("pop cx");
+                break;
+
+            case 37://"pop bx"
+                sp++;
+                bx = mem[sp];
+                traceCode.append("pop bx");
+                break;
+
+            case 38://"pop ax"
+                sp++;
+                ax = mem[sp];
+                traceCode.append("pop ax");
+                break;
+
+            case 39://"nop"
+                traceCode.append("nop");
+                break;
+
+            case 40: //"halt"
+                repetir = false;
+                traceCode.append("halt");
+                break;
+
+            case 41://"dec sp"
+                sp--;
+                traceCode.append("dec sp");
+                break;
+
+            case 42://"move [bp-"
+                //REVISAR
+                mem[bp - mem[ip + 1]] = (short) ax;
+                ip++;
+                traceCode.append("move [bp-").append(ax).append("]");
+                break;
+
+            case 43://"move [bp+"
+                //REVISAR
+                traceCode.append("move [bp+");
+                break;
+
+            case 44://"move ax,{"
+                ax = mem[ip+1];
+                traceCode.append("move ax,{").append(mem[ip+1]).append("}");
+                ip++;
+                break;
+
+            case 45://"test axEqbx,"
+                if (ax == bx) {
+                    ip = mem[ip + 1]-1;
+                    traceCode.append("test axEqbx -> ip ").append(mem[ip+1]);
+                } else {
+                    ip++;
+                    traceCode.append("test axEqbx -> ip ").append(ip);
+                }
+                break;
+
+            case 46://"inc sp"
+                sp++;
+                traceCode.append("inc sp");
+                break;
+
+            case 47://"move ax,sp"
+                ax = sp;
+                traceCode.append("move ax,sp");
+                break;
+
+            case 48://"move sp,ax"
+                sp = ax;
+                traceCode.append("move sp,ax");
+                break;
+
+            case 49://"move ax,bp"
+                ax = bp;
+                traceCode.append("move ax,bp");
+                break;
+
+            case 50://"move bp,ax,{"
+                //REVISAR
+                bp = ax;
+                traceCode.append("move bp,ax,{");
+                break;
+
+            case 51://"iret"
+                //"pop cx"
+                sp++;
+                cx = mem[sp];
+                //"pop bx"
+                sp++;
+                bx = mem[sp];
+                //"pop ax"
+                sp++;
+                ax = mem[sp];
+                //"pop bp"
+                sp++;
+                bp = mem[sp];
+                //"ret"
+                sp++;
+                ip = mem[sp];
+                ip--;
+                traceCode.append("iret");
+                break;
+
+            case 52://"int"
+                //"push ip" 
+                mem[sp] = (short) (ip + 2);
+                sp--;
+                //"push bp" 
+                mem[sp] = (short) bp;
+                sp--;
+                //"push ax" 
+                mem[sp] = (short) ax;
+                sp--;
+                //"push bx" 
+                mem[sp] = (short) bx;
+                sp--;
+                //"push cx" 
+                mem[sp] = (short) cx;
+                sp--;
+                ip = mem[mem[ip + 1]];
+                ip--;
+                traceCode.append("int");
+                break;
+
+            case 53://"sub bx,ax"
+                bx = bx - ax;
+                traceCode.append("sub bx,ax");
+                break;
+
+            default: {
+                repetir = false;
+                traceCode.append("Saiu");
+            }
+
+            if (ip >= mem.length) {
+                traceCode.append("ERRO: a memoria nao pode ser lida");
+                repetir = false;
+            }
+        }
+        ip++;
+        
+        traceCode.append("\n");
+        datas.put(EnumData.REGISTRADORES, this.valorRegistradores());
+        datas.put(EnumData.TRACE_CODE, traceCode.toString());
+        datas.put(EnumData.STACK, this.calcularStack());
+        
+        return repetir;
+    }
+    
+    private String calcularStack(){
+        StringBuilder stack = new StringBuilder();
+        for (int i = ip; i >= ip-4; i--) {
+            if (i >= 0){
+                stack.append(i).append("\n");
+            }
+        }
+        return stack.toString();
+    }
+    
+    private String valorRegistradores(){
+        StringBuilder registradores = new StringBuilder();
+        registradores.append("AX = ").append(ax).append("\n");
+        registradores.append("BX = ").append(bx).append("\n");
+        registradores.append("CX = ").append(cx).append("\n");
+        registradores.append("BP = ").append(bp).append("\n");
+        registradores.append("SP = ").append(sp).append("\n");
+        return registradores.toString();
+    }
+    
+    public void decodificador() {
+        ip = 0;
+        boolean repetir = true;
+        
         while (repetir) {
-            logs.add("Valor de IP: " + ip);
-            if (botao == 1) {
-                    //"push ip" 
-                    mem[sp] = (short) ip;
-                    sp--;
-
-                    //"push bp" 
-                    mem[sp] = (short) bp;
-                    sp--;
-
-                    //"push ax" 
-                    mem[sp] = (short) ax;
-                    sp--;
-
-                    //"push bx" 
-                    mem[sp] = (short) bx;
-                    sp--;
-
-                    //"push cx" 
-                    mem[sp] = (short) cx;
-                    sp--;
-
-                    ip = mem[0];
-                    botao = 0;
-                logs.add("EXECUTOU INTERRUPCAO: INT3");
-            }
-
-            ri = mem[ip];
-            switch (ri) {
-                case 0:// "init ax"
-                    ax = 0;
-                    break;
-
-                case 1:// "move ax,bx"
-                    ax = bx;
-                    break;
-                case 2:// "move ax,cx",
-                    ax = cx;
-                    break;
-
-                case 3:// "move bx,ax"
-                    bx = ax;
-                    break;
-
-                case 4:// "move cx,ax"
-                    cx = ax;
-                    break;
-
-                case 5:// "move ax,[",
-                    ax = mem[mem[ip + 1]];
-                    logs.add("Executou move ax,[" + mem[ip + 1] + "]");
-                    ip++;
-                    break;
-
-                case 6:// "move ax,[bx+"
-                    ax = mem[bx+mem[ip+1]];
-                    logs.add("Executou move ax, [bx+" + mem[ip+1]+ "]");
-                    ip++;
-                    break;
-
-                case 7:// "move ax,[bp-"
-                    ax = mem[bp - mem[ip+1]];
-                    logs.add("Executou move ax, [bx-" + mem[ip+1]+ "]");
-                    ip ++;
-                    break;
-
-                case 8://"move ax,[bp+"
-                    ax = mem[bp+mem[ip+1]];
-                    logs.add("Executou move ax, [bp+" + mem[ip+1]+ "]");
-                    ip++;
-                    break;
-
-                case 9://"move ["
-                    mem[mem[ip + 1]] = (short) ax;
-                    logs.add("Executou move [" + mem[ip+1]+ "],ax");
-                    ip++;
-                    break;
-
-                case 10://"move [bx+"
-                    mem[bx + mem[ip+1]] = (short) ax;
-                    logs.add("Executou move [bx+" + mem[ip+1]+ "],ax");
-                    ip ++;
-                    break;
-
-                case 11://"move bp,sp"
-                    bp = sp;
-                    break;
-
-                case 12://"move sp,bp"
-                    sp = bp;
-                    break;
-
-                case 13://"add ax,bx"
-                    ax = ax + bx;
-                    break;
-
-                case 14://"add ax,cx"
-                    ax = ax + cx;
-                    break;
-
-                case 15://"add bx,cx"
-                    bx = bx + cx;
-                    break;
-
-                case 16://"sub ax,bx"
-                    ax = ax - bx;
-                    break;
-
-                case 17://"sub ax,cx"
-                    ax = ax - cx;
-                    break;
-
-                case 18://"sub bx,cx"
-                    bx = bx - cx;
-                    break;
-
-                case 19://"inc ax"
-                    ax++;
-                    break;
-
-                case 20://"inc bx"
-                    bx++;
-                    break;
-
-                case 21://"inc cx"
-                    cx++;
-                    break;
-
-                case 22://"dec ax"
-                    ax--;
-                    break;
-
-                case 23://"dec bx"
-                    bx--;
-                    break;
-
-                case 24://"dec cx"
-                    cx--;
-                    break;
-
-                case 25://"test ax0,"
-
-                    if (ax == 0) {
-                        ip = aux + mem[ip + 1] - 1; //-1 para compensar o ip++ no laco
-
-                    } else {
-                        ip++;
-                    }
-
-                    break;
-
-                case 26://"jmp "
-                    ip = aux + mem[ip + 1];
-                    ip--;
-                    break;
-
-                case 27://"call"
-                    mem[sp] = (short) (ip + 2);
-                    sp--;
-                    ip = aux + mem[ip + 1];
-                    ip--; //para compensar a alteracao de ip
-                    break;
-
-                case 28://"ret"
-                    sp++;
-                    ip = mem[sp];
-                    ip--;
-                    break;
-
-                case 29://"in ax"
-                    ax = Integer.parseInt(JOptionPane.showInputDialog("ax:"));
-                    break;
-
-                case 30://"out ax"
-                    System.out.println("Saida: AX=" + ax);
-                    datas.put(EnumData.OUT, Arrays.asList(Integer.toString(ax)));
-                    break;
-
-                case 31://"push ax"
-                    mem[sp] = (short) ax;
-                    sp--;
-                    break;
-
-                case 32://"push bx"
-                    mem[sp] = (short) bx;
-                    sp--;
-                    break;
-
-                case 33://"push cx"
-                    mem[sp] = (short) cx;
-                    sp--;
-                    break;
-
-                case 34://"push bp"
-                    mem[sp] = (short) bp;
-                    sp--;
-                    break;
-
-                case 35://"pop bp"
-                    sp++;
-                    bp = mem[sp];
-                    break;
-
-                case 36://"pop cx"
-                    sp++;
-                    cx = mem[sp];
-                    break;
-
-                case 37://"pop bx"
-                    sp++;
-                    bx = mem[sp];
-                    break;
-
-                case 38://"pop ax"
-                    sp++;
-                    ax = mem[sp];
-                    break;
-
-                case 39://"nop"
-                    break;
-
-                case 40: //"halt"
-                    repetir = false;
-                    break;
-
-                case 41://"dec sp"
-                    sp--;
-                    break;
-
-                case 42://"move [bp-"
-                    mem[aux + bp - mem[ip + 1]] = (short) ax;
-                    ip++;
-                    break;
-
-                case 43://"move [bp+"
-                    break;
-
-                case 44://"move ax,{"
-                    ax = mem[ip+1];
-                    ip++;
-                    break;
-
-                case 45://"test axEqbx,"
-                    if (ax == bx) {
-                        ip = mem[ip + 1]-1;
-                        logs.add("Executou THEN test axEqbx -> ip"+ mem[ip+1]);
-                    } else {
-
-                        ip++;
-                        logs.add("Executou ELSE test axEqbx -> ip" + ip);
-                    }
-                    break;
-
-                case 46://"inc sp"
-                    sp++;
-                    break;
-
-                case 47://"move ax,sp"
-                    ax = sp;
-                    break;
-
-                case 48://"move sp,ax"
-                    sp = ax;
-                    break;
-
-                case 49://"move ax,bp"
-                    ax = bp;
-                    break;
-
-                case 50://"move bp,ax,{"
-                    bp = ax;
-                    break;
-
-                case 51://"iret"
-                    //"pop cx"
-                    sp++;
-                    cx = mem[sp];
-                    //"pop bx"
-                    sp++;
-                    bx = mem[sp];
-                    //"pop ax"
-                    sp++;
-                    ax = mem[sp];
-                    //"pop bp"
-                    sp++;
-                    bp = mem[sp];
-                    //"ret"
-                    sp++;
-                    ip = mem[sp];
-                    ip--;
-                    break;
-
-                case 52://"int"
-                    //"push ip" 
-                    mem[sp] = (short) (ip + 2);
-                    sp--;
-                    //"push bp" 
-                    mem[sp] = (short) bp;
-                    sp--;
-                    //"push ax" 
-                    mem[sp] = (short) ax;
-                    sp--;
-                    //"push bx" 
-                    mem[sp] = (short) bx;
-                    sp--;
-                    //"push cx" 
-                    mem[sp] = (short) cx;
-                    sp--;
-                    ip = mem[aux + mem[ip + 1]];
-                    ip--;
-                    break;
-                    
-                case 53://"sub bx,ax"
-                    bx = bx - ax;
-                    break;
-                    
-                default: {
-                    repetir = false;
-                    logs.add("Saiu");
-                }
-
-                if (ip >= mem.length) {
-                    logs.add("ERRO: a memoria nao pode ser lida");
-                    repetir = false;
-                }
-            }
-
-            ip++;
-            
-            stack.add(Integer.toString(ri));
-            //System.out.println("IP - " + ip);
+            repetir = this.executaInstrucao();
         }
-        
-        registradores.add("AX = " + ax);
-        registradores.add("BX = " + bx);
-        registradores.add("CX = " + cx);
-        registradores.add("SP = " + sp);
-        registradores.add("BP = " + bp);
-        registradores.add("IP = " + ip);
-        
-        datas.put(EnumData.REGISTRADORES, registradores);
-        datas.put(EnumData.STACK, stack);
-        datas.put(EnumData.LOG, logs);
-        
-        /**
-         System.out.println("Valor de AX: " + ax);
-         System.out.println("Valor de BX: " + bx);
-         System.out.println("Valor de CX: " + cx);
-         System.out.println("Valor de SP: " + sp);
-         System.out.println("Valor de mem[3]: " + mem[3]);
-         System.out.println("Valor de mem[4]: " + mem[4]);
-         System.out.println("Valor de mem[5]: " + mem[5]);
-         System.out.println("Valor de mem[14]: " + mem[14]);
-         System.out.println("Valor de mem[13]: " + mem[13]);
-         System.out.println("Valor de mem[12]: " + mem[12]);
-         System.out.println("Valor de mem[11]: " + mem[11]);
-         **/
+    }
+
+    public Map<EnumData, String> getDatas() {
         return datas;
     }
 }

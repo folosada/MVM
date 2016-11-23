@@ -8,12 +8,15 @@ package br.furb.interfaces;
 import br.furb.enumerator.EnumData;
 import br.furb.nucleo.MVM;
 import br.furb.interfaces.NumberedBorder;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -22,8 +25,9 @@ import javax.swing.JOptionPane;
  * @author Gabriel Bernardi
  */
 public class CodeCompilerDialog extends javax.swing.JDialog {
-
+    
     private String code;
+    private MVM mvm;
     
     /**
      * Creates new form CodeCompilerDialog
@@ -60,10 +64,16 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         {}
     }
     
-    public void init(String code){       
-        this.code = code;
-        this.codigoFonteJTA.setText(code);
-        this.setVisible(true);
+    public void init(String code){ 
+        try {
+            this.code = code;
+            this.codigoFonteJTA.setText(code);
+            mvm = new MVM();
+            mvm.traduzirCodigoFonte(this.code, 0);
+            this.setVisible(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao traduzir o código fonte: " + e.getMessage());
+        }
     }
     
     /**
@@ -278,13 +288,20 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void stepJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepJBActionPerformed
-
+        try {
+            mvm.executaInstrucao();
+            this.limparCampos();
+            this.popularCampos();
+        } catch (Exception ex) {
+            Logger.getLogger(CodeCompilerDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_stepJBActionPerformed
 
     private void runJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runJBActionPerformed
         try {
-            Map<EnumData, List<String>> datas = MVM.traduzirCodigoFonte(this.code, 0, true);
-            this.popularCampos(datas);
+            mvm.decodificador();
+            this.limparCampos();
+            this.popularCampos();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Falha na execução do programa.\nErro: " + e.getMessage());
         }
@@ -363,29 +380,29 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
     private javax.swing.JButton stopJB;
     // End of variables declaration//GEN-END:variables
 
-    private void popularCampos(Map<EnumData, List<String>> datas){
+    private void popularCampos(){
+        Map<EnumData, String> datas = this.mvm.getDatas();
         if (datas.get(EnumData.REGISTRADORES) != null){
-            for (String reg : datas.get(EnumData.REGISTRADORES)) {
-                this.registradorJTA.append(reg + "\n");
-            }
+            this.registradorJTA.append(datas.get(EnumData.REGISTRADORES) + "\n");
         }
         
         if (datas.get(EnumData.STACK) != null){
-            for (String stack : datas.get(EnumData.STACK)) {
-                this.stackJTA.append(stack + "\n");
-            }
+            this.stackJTA.append(datas.get(EnumData.STACK) + "\n");
         }
         
         if (datas.get(EnumData.OUT) != null){
-            for (String out : datas.get(EnumData.OUT)) {
-                this.linhaJTF.setText(out);
-            }
+            this.linhaJTF.setText(datas.get(EnumData.OUT));
         }
         
-        if (datas.get(EnumData.LOG) != null){
-            for (String log : datas.get(EnumData.LOG)) {
-//                this.logJTA.append(log + "\n");
-            }
+        if (datas.get(EnumData.TRACE_CODE) != null){
+            this.consoleJTA.append(datas.get(EnumData.TRACE_CODE));
         }
+    }
+    
+    private void limparCampos(){
+        this.registradorJTA.setText("");
+        this.stackJTA.setText("");
+        this.linhaJTF.setText("");
+        this.consoleJTA.setText("");
     }
 }
