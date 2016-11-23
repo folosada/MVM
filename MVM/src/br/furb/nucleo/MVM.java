@@ -662,6 +662,7 @@ public class MVM {
         registradores.append("CX = ").append(cx).append("\n");
         registradores.append("BP = ").append(bp).append("\n");
         registradores.append("SP = ").append(sp).append("\n");
+        registradores.append("IP = ").append(ip).append("\n");
         return registradores.toString();
     }
     

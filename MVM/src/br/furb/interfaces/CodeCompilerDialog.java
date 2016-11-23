@@ -143,7 +143,7 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         });
         ferramentaJTB.add(runJB);
 
-        stopJB.setText("Stop");
+        stopJB.setText("Stop/Reset");
         stopJB.setFocusable(false);
         stopJB.setPreferredSize(new java.awt.Dimension(70, 35));
         stopJB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -292,6 +292,7 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
             mvm.executaInstrucao();
             this.limparCampos();
             this.popularCampos();
+            this.verificaTerminoPrograma();
         } catch (Exception ex) {
             Logger.getLogger(CodeCompilerDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -299,6 +300,7 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
 
     private void runJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runJBActionPerformed
         try {
+            this.init(code);
             mvm.decodificador();
             this.limparCampos();
             this.popularCampos();
@@ -308,7 +310,8 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_runJBActionPerformed
 
     private void stopJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopJBActionPerformed
-        
+        this.init(code);
+        this.limparCampos();
     }//GEN-LAST:event_stopJBActionPerformed
 
     /**
@@ -396,6 +399,16 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         
         if (datas.get(EnumData.TRACE_CODE) != null){
             this.consoleJTA.append(datas.get(EnumData.TRACE_CODE));
+        }
+    }
+    
+    private void verificaTerminoPrograma(){
+        String console[] = this.consoleJTA.getText().toUpperCase().split("\n");
+        for (String string : console) {
+            if ("HALT".equals(string)){
+                this.init(this.code);
+                break;
+            }
         }
     }
     
