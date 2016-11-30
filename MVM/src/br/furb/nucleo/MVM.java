@@ -25,6 +25,7 @@ public class MVM {
     
     public MVM(){
         botao = 0;
+//        mem = new short[1024];
         datas = new HashMap<>();
         traceCode = new StringBuilder();
         ax = 0;
@@ -645,9 +646,9 @@ public class MVM {
     private String calcularStack(){
         String stack = "";
         
-        for (int i = sp; i >= sp-4; i--) {
+        for (int i = sp-5; i <= sp; i++) {
             if (i >= 0){
-                stack = "[" + (sp-i) + "] - " + mem[sp-i] + "\n" + stack;
+                stack = "[" + (i) + "] - " + mem[i] + "\n" + stack;
             }
         }
         return stack;

@@ -297,7 +297,7 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
             mvm.executaInstrucao();
             this.limparCampos();
             this.popularCampos();
-            this.verificaTerminoPrograma();
+//            this.verificaTerminoPrograma();
             this.isRun = false;
         } catch (Exception ex) {
             Logger.getLogger(CodeCompilerDialog.class.getName()).log(Level.SEVERE, null, ex);
@@ -409,15 +409,15 @@ public class CodeCompilerDialog extends javax.swing.JDialog {
         }
     }
     
-    private void verificaTerminoPrograma(){
-        String console[] = this.consoleJTA.getText().toUpperCase().split("\n");
-        for (String string : console) {
-            if ("HALT".equals(string)){
-                this.init(this.code);
-                break;
-            }
-        }
-    }
+//    private void verificaTerminoPrograma(){
+//        String console[] = this.consoleJTA.getText().toUpperCase().split("\n");
+//        for (String string : console) {
+//            if ("HALT".equals(string)){
+//                this.init(this.code);
+//                break;
+//            }
+//        }
+//    }
     
     private void limparCampos(){
         this.registradorJTA.setText("");
