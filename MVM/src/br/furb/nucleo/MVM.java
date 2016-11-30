@@ -597,6 +597,7 @@ public class MVM {
                 break;
 
             case 52://"int"
+                traceCode.append("int ").append(mem[ip + 1]);
                 //"push ip" 
                 mem[sp] = (short) (ip + 2);
                 sp--;
@@ -614,7 +615,6 @@ public class MVM {
                 sp--;
                 ip = mem[mem[ip + 1]];
                 ip--;
-                traceCode.append("int");
                 break;
 
             case 53://"sub bx,ax"
